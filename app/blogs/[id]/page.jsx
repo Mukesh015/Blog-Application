@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 export default function Blogs({ params }) {
-  const blogTitle = decodeURIComponent(params.blogid);
+  const blogTitle = decodeURIComponent(params.id);
   const [description, setDescription] = useState('');
   console.log(blogTitle)
 
