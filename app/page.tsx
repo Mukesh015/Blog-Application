@@ -1,7 +1,21 @@
+"use client"
+
 import Image from "next/image";
-import Link from "next/link";
+import { useEffect } from "react";
+import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
+
+function delayedFunction() {
+  console.log("Page has been loaded after 4 seconds");
+}
 
 export default function Home() {
+  useEffect(() => {
+    const delayedFunction = () => {
+      console.log("Page has been loaded after 4 seconds");
+    };
+    const timeoutId = setTimeout(delayedFunction, 6000);
+    return () => clearTimeout(timeoutId);
+  }, []);
   return (
     <>
       <nav className="bg-white border-gray-200 dark:bg-gray-900 fixed top-0 w-full">
@@ -164,7 +178,7 @@ export default function Home() {
             rel="noopener noreferrer"
           >
             <h2 className={`mb-3 text-2xl font-semibold`}>
-            Blog Templates{" "}
+              Blog Templates{" "}
               <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
                 -&gt;
               </span>
@@ -187,7 +201,7 @@ export default function Home() {
               </span>
             </h2>
             <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-              If you are not a user please login first for further processes. So let get strated. 
+              If you are not a user please login first for further processes. So let get strated.
             </p>
           </a>
         </div>
