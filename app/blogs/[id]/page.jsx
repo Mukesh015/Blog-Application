@@ -2,9 +2,9 @@
 import { useState, useEffect } from 'react';
 
 export default function Blogs({ params }) {
-  const blogTitle = decodeURIComponent(params.id);
+  const title = decodeURIComponent(params.id);
   const [description, setDescription] = useState('');
-  console.log(blogTitle)
+  console.log(title)
 
   useEffect(() => {
     const fetchDescription = async () => {
@@ -14,7 +14,7 @@ export default function Blogs({ params }) {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ blogTitle }),
+          body: JSON.stringify({ title }),
         });
 
         if (!response.ok) {
@@ -23,14 +23,14 @@ export default function Blogs({ params }) {
 
         const data = await response.json();
         console.log(data);
-        setDescription(data); // Assuming this is the description you want to display
+        setDescription(data);
       } catch (error) {
         console.error('Description fetching failed 2', error);
       }
     };
 
     fetchDescription();
-  }, [blogTitle]);
+  }, [title]);
 
   return (
     <main className="flex flex-col justify-between items-center">
@@ -58,7 +58,7 @@ export default function Blogs({ params }) {
         </nav>
       </div>
       <div className="p-8">
-        <p className="font-bold cursor-pointer pb-5">{blogTitle}</p>
+        <p className="font-bold cursor-pointer pb-5">{title}</p>
         <span className="font-light">{description}</span>
       </div>
     </main>

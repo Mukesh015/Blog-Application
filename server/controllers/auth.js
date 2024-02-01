@@ -16,7 +16,7 @@ async function newVlogCreate(req,res){
 }
 
 async function getBlog(req,res){
-    const {title} = req.body.blogTitle;
+    const {title} = req.body;
     try {
         console.log(title)
         VlogModel.findOne({ title : title })
