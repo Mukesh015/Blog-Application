@@ -1,12 +1,11 @@
+
 export default function BlogsLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
       <body>
-        <>
+        <header>
           <nav className="bg-white border-gray-200 dark:bg-gray-900 fixed top-0 w-full">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
               <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
@@ -109,8 +108,8 @@ export default function BlogsLayout({
               </div>
             </div>
           </nav>
-          {children}
-        </>
+        </header>
+        {children}
       </body>
     </html>
   );

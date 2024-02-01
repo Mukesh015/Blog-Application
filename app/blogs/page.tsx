@@ -1,7 +1,11 @@
-export default function Blog(){
+"use client"
+
+export default function Blog() {
     return (
         <>
-        <h1>nsdkcndsndvsnvdms </h1>
+           <header>
+            
+           </header>
         </>
     )
 }

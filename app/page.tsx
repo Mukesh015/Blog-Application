@@ -1,21 +1,8 @@
-"use client"
-
 import Image from "next/image";
-import { useEffect } from "react";
 import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
-
-function delayedFunction() {
-  console.log("Page has been loaded after 4 seconds");
-}
+import Link from "next/link";
 
 export default function Home() {
-  useEffect(() => {
-    const delayedFunction = () => {
-      console.log("Page has been loaded after 4 seconds");
-    };
-    const timeoutId = setTimeout(delayedFunction, 6000);
-    return () => clearTimeout(timeoutId);
-  }, []);
   return (
     <>
       <nav className="bg-white border-gray-200 dark:bg-gray-900 fixed top-0 w-full">
@@ -187,23 +174,21 @@ export default function Home() {
               Explore starter templates for creating new blogs.
             </p>
           </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Register / Login{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-              If you are not a user please login first for further processes. So let get strated.
-            </p>
-          </a>
+          <LoginLink postLoginRedirectURL="/dashboard">
+            <div
+              className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            >
+              <h2 className={`mb-3 text-2xl font-semibold`}>
+                Register / Login{}
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+              <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
+                If you are not a user, please login first for further processes. So let's get started.
+              </p>
+            </div>
+          </LoginLink>
         </div>
       </main>
     </>
