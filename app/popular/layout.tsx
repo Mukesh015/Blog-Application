@@ -1,11 +1,14 @@
-import Image from "next/image";
-import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 
-
-export default function Home() {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <>
-      <nav className="bg-white border-gray-200 dark:bg-gray-900 fixed top-0 w-full">
+    <html lang="en">
+      <body>
+        <header>
+        <nav className="bg-white border-gray-200 dark:bg-gray-900 fixed top-0 w-full">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2022/05/Mastercard_2019_logo.svg-e1659036851269.png?auto=format&q=60&fit=max&w=930" className="h-8" alt="Flowbite Logo" />
@@ -107,86 +110,9 @@ export default function Home() {
           </div>
         </div>
       </nav>
-
-      <main className="flex min-h-screen flex-col items-center justify-between p-24 overflow-hidden">
-        <div className="z-10 max-w-5xl w-full jflex items-center justify-center font-serif pt-10 ">
-          <h1 className="text-3xl text-center ">WELCOME TO BLOG COMMUNITY</h1>
-        </div>
-        <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-          <Image
-            className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert pt-10"
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-        </div>
-
-        <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-          <a
-            href="/docs"
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          >
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Learn{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Learn how to create and upload your blogs here.
-            </p>
-          </a>
-
-          <a
-            href="/popular"
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          >
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Populars{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Let's see all popular blogs &nbsp;here!
-            </p>
-          </a>
-
-          <a
-            href="/templates"
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Blog Templates{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Explore starter templates for creating new blogs.
-            </p>
-          </a>
-          <LoginLink postLoginRedirectURL="/dashboard">
-            <div
-              className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            >
-              <h2 className={`mb-3 text-2xl font-semibold`}>
-                Register / Login{}
-                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                  -&gt;
-                </span>
-              </h2>
-              <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-                If you are not a user, please login first for further processes.
-              </p>
-            </div>
-          </LoginLink>
-        </div>
-      </main>
-    </>
+        </header>
+        {children}
+      </body>
+    </html>
   );
 }
