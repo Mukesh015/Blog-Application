@@ -2,13 +2,22 @@ const mongoose = require('mongoose');
 
 const vlogSchema = new mongoose.Schema(
     {
-        title : {
+        query : {
             type:String,
-            required : true
+            required : true,
+            unique:true
+        },
+        senderEmail:{
+            type:String
         },
         description : {
-            type:String,
-            required : true
+            type:Array,
+        },
+        authorName : {
+            type:Array,
+        },
+        authorEmail : {
+            type:Array,
         }
     },
     {

@@ -1,4 +1,8 @@
-export default function Inbox() {
+"use client"
+import dynamic from "next/dynamic";
+
+
+const Comment = () => {
   return (
     <>
       <div className="mr-16 ml-80 mt-20">
@@ -92,3 +96,5 @@ export default function Inbox() {
     </>
   );
 }
+
+export default dynamic(() => Promise.resolve(Comment), { ssr: false })

@@ -1,4 +1,8 @@
-export default function Inbox() {
+"use client"
+import dynamic from "next/dynamic";
+
+
+const Inbox = ()=> {
     return (
         <>
             <div className="mt-28 ml-80 mr-60">
@@ -48,3 +52,4 @@ export default function Inbox() {
         </>
     )
 }
+export default dynamic (() => Promise.resolve(Inbox), {ssr: false})

@@ -1,6 +1,7 @@
+"use client"
+import dynamic from "next/dynamic";
+
 import React from 'react';
-
-
 const Dashboard = () => {
   return (
     <>
@@ -9,16 +10,14 @@ const Dashboard = () => {
           <div className="grid grid-cols-2 gap-4 mb-4">
 
             {/* 1st */}
-            <div className="flex flex-col items-center justify-center rounded bg-gray-50 h-52 dark:bg-gray-800">
-              <p className="text-2xl mx-16 text-gray-400 dark:text-gray-500 text-center">
-                <h3 className='font-bold text-white mt-3'>Have Confusion</h3>
-                <h6 className='text-sm pt-3'>
-                  Have any query. Let us know by posting. You will be notified in the comments box when someone resolves your query. Whole process make few times. So let's get started!
-                </h6>
+            <div className="flex flex-col items-center justify-center rounded bg-gray-50 h-52 dark:bg-gray-800 p-6">
+              <h3 className="font-bold text-white text-2xl mt-3">Have Confusion?</h3>
+              <p className="text-center text-gray-400 dark:text-gray-500 mt-3">
+                Have any queries? Let us know by posting. You will be notified in the comments box when someone resolves your query. The whole process may take some time, so let's get started!
               </p>
               <a
-                href="/dashboard/query"  // Replace "/your-link" with the actual URL you want the link to navigate to
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 inline-flex items-center mt-auto mb-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                href="/dashboard/query"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-3 inline-flex items-center mt-6 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <svg
                   className="w-5 h-5 mr-2"
@@ -39,16 +38,15 @@ const Dashboard = () => {
               </a>
             </div>
 
-            <div className="flex flex-col items-center justify-center rounded bg-gray-50 h-52 dark:bg-gray-800">
-              <p className="text-2xl mx-16 text-gray-400 dark:text-gray-500 text-center">
-                <h3 className='font-bold text-white mt-3'>Solve Query</h3>
-                <h6 className='text-sm pt-3'>
-                  Solve other queries to helps others. You can get hired my making soluutions if it is correct. Do your best to make your crrier by community.
-                </h6>
+
+            <div className="flex flex-col items-center justify-center rounded bg-gray-50 h-52 dark:bg-gray-800 p-6">
+              <h3 className="font-bold text-white text-2xl mt-3">Solve Query</h3>
+              <p className="text-center text-gray-400 dark:text-gray-500 mt-3">
+                Solve other queries to helps others. You can get hired my making soluutions if it is correct. Do your best to make your crrier by community.
               </p>
               <a
-                href="/dashboard/solve"  // Replace "/your-link" with the actual URL you want the link to navigate to
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 inline-flex items-center mt-auto mb-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                href="/dashboard/solve"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-3 inline-flex items-center mt-6 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <svg
                   className="w-5 h-5 mr-2"
@@ -65,20 +63,17 @@ const Dashboard = () => {
                     d="M1 5h12m0 0L9 1m4 4L9 9"
                   />
                 </svg>
-                <span>Make a Solution</span>
+                <span>Solve Query</span>
               </a>
             </div>
-
-            <div className="flex flex-col items-center justify-center rounded bg-gray-50 h-52 dark:bg-gray-800">
-              <p className="text-2xl mx-16 text-gray-400 dark:text-gray-500 text-center">
-                <h3 className='font-bold text-white mt-3'>Solve Query</h3>
-                <h6 className='text-sm pt-3'>
-                  Solve other queries to helps others. You can get hired my making soluutions if it is correct. Do your best to make your crrier by community.
-                </h6>
+            <div className="flex flex-col items-center justify-center rounded bg-gray-50 h-52 dark:bg-gray-800 p-6">
+              <h3 className="font-bold text-white text-2xl mt-3">Not Designed !</h3>
+              <p className="text-center text-gray-400 dark:text-gray-500 mt-3">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto accusamus labore dicta ab natus iste fugit voluptatem doloribus vero.
               </p>
               <a
-                href="/your-link"  // Replace "/your-link" with the actual URL you want the link to navigate to
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 inline-flex items-center mt-auto mb-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                href="#"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-3 inline-flex items-center mt-6 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <svg
                   className="w-5 h-5 mr-2"
@@ -95,20 +90,17 @@ const Dashboard = () => {
                     d="M1 5h12m0 0L9 1m4 4L9 9"
                   />
                 </svg>
-                <span>Make a Solution</span>
+                <span>Make a Query</span>
               </a>
             </div>
-
-            <div className="flex flex-col items-center justify-center rounded bg-gray-50 h-52 dark:bg-gray-800">
-              <p className="text-2xl mx-16 text-gray-400 dark:text-gray-500 text-center">
-                <h3 className='font-bold text-white mt-3'>Feedback</h3>
-                <h6 className='text-sm pt-3'>
-                  Let us know how is your personal experience to browse here. Submit a form by clicking here. Your feedback is valuable for us.
-                </h6>
+            <div className="flex flex-col items-center justify-center rounded bg-gray-50 h-52 dark:bg-gray-800 p-6">
+              <h3 className="font-bold text-white text-2xl mt-3">Feedback</h3>
+              <p className="text-center text-gray-400 dark:text-gray-500 mt-3">
+                Let us know how is your personal experience to browse here. Submit a form by clicking here. Your feedback is valuable for us.
               </p>
               <a
-                href="/feedback"  // Replace "/your-link" with the actual URL you want the link to navigate to
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 inline-flex items-center mt-auto mb-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                href="/feedback"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-3 inline-flex items-center mt-6 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <svg
                   className="w-5 h-5 mr-2"
@@ -128,7 +120,6 @@ const Dashboard = () => {
                 <span>Feedback</span>
               </a>
             </div>
-
           </div>
         </div>
       </div>
@@ -136,4 +127,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default dynamic(() => Promise.resolve(Dashboard), { ssr: false })

@@ -1,8 +1,22 @@
+"use client"
 import Image from "next/image";
 import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { useState } from 'react';
+import Link from "next/link";
+import { useRouter } from 'next/navigation'
 
 
 export default function Home() {
+  const router = useRouter()
+
+  const [routeid, setRouteid] = useState('');
+
+  const handleSearch=()=>{
+   
+    router.push(`/blogs/${routeid}`)
+
+  }
+
   return (
     <>
       <nav className="bg-white border-gray-200 dark:bg-gray-900 fixed top-0 w-full">
@@ -37,11 +51,14 @@ export default function Home() {
                 id="search-navbar"
                 className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search..."
+                onChange={(e) => setRouteid(e.target.value.toLowerCase())}
+                
               />
             </div>
             <button
               type="submit"
               className="inline-flex items-center py-2.5 px-3 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              onClick={handleSearch}
             >
               <svg
                 className="w-4 h-4 me-2"
@@ -155,7 +172,7 @@ export default function Home() {
           </a>
 
           <a
-            href="/templates"
+            href="/template"
             className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
             target="_blank"
             rel="noopener noreferrer"

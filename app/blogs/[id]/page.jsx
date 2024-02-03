@@ -1,14 +1,43 @@
 "use client";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Blogs({ params }) {
+  const query = decodeURIComponent(params.id);
+  const [description, setDescription] = useState("");
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const fetchDescription = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/getblog", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Description fetching failed 1");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        setDescription(data);
+      } catch (error) {
+        console.error("Description fetching failed 2", error);
+      }
+    };
+
+    fetchDescription();
+  }, [query]);
+
   return (
     <>
       <div className="mt-28 ml-80 mr-60">
         <div>
-          <p className="font-xl">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias,
-            voluptatibus.
-          </p>
+          <h3 className="font-xl">{query}</h3>
         </div>
         <div className="mt-10">
           <p>
@@ -37,6 +66,7 @@ export default function Blogs({ params }) {
             </label>
             <textarea
               id="message"
+              rows="auto"
               style={{
                 height: "auto",
                 width: "100%", // Set width to 100%
@@ -44,6 +74,8 @@ export default function Blogs({ params }) {
               }}
               className="block p-3.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Write your thoughts here..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
             ></textarea>
             <button className="relative inline-flex mt-10 items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
               <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
@@ -53,68 +85,68 @@ export default function Blogs({ params }) {
           </form>
         </div>
       </div>
-      <footer className="bg-white dark:bg-gray-900">
-        <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-          <div className="md:flex md:justify-between">
-            <div className="mb-6 md:mb-0">
-              <a href="/" className="flex items-center">
+      <footer class="bg-white dark:bg-gray-900">
+        <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
+          <div class="md:flex md:justify-between">
+            <div class="mb-6 md:mb-0">
+              <a href="/" class="flex items-center">
                 <img
                   src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2022/05/Mastercard_2019_logo.svg-e1659036851269.png?auto=format&q=60&fit=max&w=930"
-                  className="h-8 me-3"
+                  class="h-8 me-3"
                   alt="FlowBite Logo"
                 />
-                <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
                   Blog Community
                 </span>
               </a>
             </div>
-            <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+            <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
               <div>
-                <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
                   Resources
                 </h2>
-                <ul className="text-gray-500 dark:text-gray-400 font-medium">
-                  <li className="mb-4">
-                    <a href="/" className="hover:underline">
+                <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                  <li class="mb-4">
+                    <a href="/" class="hover:underline">
                       Blog
                     </a>
                   </li>
                   <li>
-                    <a href="/" className="hover:underline">
+                    <a href="/" class="hover:underline">
                       Community
                     </a>
                   </li>
                 </ul>
               </div>
               <div>
-                <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
                   Follow us
                 </h2>
-                <ul className="text-gray-500 dark:text-gray-400 font-medium">
-                  <li className="mb-4">
-                    <a href="/" className="hover:underline ">
+                <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                  <li class="mb-4">
+                    <a href="/" class="hover:underline ">
                       Github
                     </a>
                   </li>
                   <li>
-                    <a href="/" className="hover:underline">
+                    <a href="/" class="hover:underline">
                       Discord
                     </a>
                   </li>
                 </ul>
               </div>
               <div>
-                <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
                   Legal
                 </h2>
-                <ul className="text-gray-500 dark:text-gray-400 font-medium">
-                  <li className="mb-4">
-                    <a href="#" className="hover:underline">
+                <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                  <li class="mb-4">
+                    <a href="#" class="hover:underline">
                       Privacy Policy
                     </a>
                   </li>
                   <li>
-                    <a href="#" className="hover:underline">
+                    <a href="#" class="hover:underline">
                       Terms &amp; Conditions
                     </a>
                   </li>
@@ -122,22 +154,22 @@ export default function Blogs({ params }) {
               </div>
             </div>
           </div>
-          <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-          <div className="sm:flex sm:items-center sm:justify-between">
-            <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+          <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+          <div class="sm:flex sm:items-center sm:justify-between">
+            <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
               © 2024{" "}
-              <a href="https://flowbite.com/" className="hover:underline">
+              <a href="https://flowbite.com/" class="hover:underline">
                 Blog Community™
               </a>
               . All Rights Reserved.
             </span>
-            <div className="flex mt-4 sm:justify-center sm:mt-0">
+            <div class="flex mt-4 sm:justify-center sm:mt-0">
               <a
                 href="#"
-                className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                class="text-gray-500 hover:text-gray-900 dark:hover:text-white"
               >
                 <svg
-                  className="w-4 h-4"
+                  class="w-4 h-4"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -149,14 +181,14 @@ export default function Blogs({ params }) {
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span className="sr-only">Facebook page</span>
+                <span class="sr-only">Facebook page</span>
               </a>
               <a
                 href="#"
-                className="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5"
+                class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5"
               >
                 <svg
-                  className="w-4 h-4"
+                  class="w-4 h-4"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -164,14 +196,14 @@ export default function Blogs({ params }) {
                 >
                   <path d="M16.942 1.556a16.3 16.3 0 0 0-4.126-1.3 12.04 12.04 0 0 0-.529 1.1 15.175 15.175 0 0 0-4.573 0 11.585 11.585 0 0 0-.535-1.1 16.274 16.274 0 0 0-4.129 1.3A17.392 17.392 0 0 0 .182 13.218a15.785 15.785 0 0 0 4.963 2.521c.41-.564.773-1.16 1.084-1.785a10.63 10.63 0 0 1-1.706-.83c.143-.106.283-.217.418-.33a11.664 11.664 0 0 0 10.118 0c.137.113.277.224.418.33-.544.328-1.116.606-1.71.832a12.52 12.52 0 0 0 1.084 1.785 16.46 16.46 0 0 0 5.064-2.595 17.286 17.286 0 0 0-2.973-11.59ZM6.678 10.813a1.941 1.941 0 0 1-1.8-2.045 1.93 1.93 0 0 1 1.8-2.047 1.919 1.919 0 0 1 1.8 2.047 1.93 1.93 0 0 1-1.8 2.045Zm6.644 0a1.94 1.94 0 0 1-1.8-2.045 1.93 1.93 0 0 1 1.8-2.047 1.918 1.918 0 0 1 1.8 2.047 1.93 1.93 0 0 1-1.8 2.045Z" />
                 </svg>
-                <span className="sr-only">Discord community</span>
+                <span class="sr-only">Discord community</span>
               </a>
               <a
                 href="#"
-                className="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5"
+                class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5"
               >
                 <svg
-                  className="w-4 h-4"
+                  class="w-4 h-4"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -183,14 +215,14 @@ export default function Blogs({ params }) {
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span className="sr-only">Twitter page</span>
+                <span class="sr-only">Twitter page</span>
               </a>
               <a
                 href="#"
-                className="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5"
+                class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5"
               >
                 <svg
-                  className="w-4 h-4"
+                  class="w-4 h-4"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -202,14 +234,14 @@ export default function Blogs({ params }) {
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span className="sr-only">GitHub account</span>
+                <span class="sr-only">GitHub account</span>
               </a>
               <a
                 href="#"
-                className="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5"
+                class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5"
               >
                 <svg
-                  className="w-4 h-4"
+                  class="w-4 h-4"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -221,7 +253,7 @@ export default function Blogs({ params }) {
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span className="sr-only">Dribbble account</span>
+                <span class="sr-only">Dribbble account</span>
               </a>
             </div>
           </div>
