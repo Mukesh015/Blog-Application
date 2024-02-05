@@ -18,11 +18,12 @@ export default function Login() {
         },
       });
       if (response.statusCode === 403 || response.statusCode === 401) {
-        throw new Error("Auto Login failed");
+        console.log("Login failed");
       }
-      const data = await response.json();
-      console.log("Auto Logged in successfully");
-      router.push("/dashboard");
+      if (response.statusCode === 200) {
+        console.log("Auto Logged in successfully");
+        router.push("/dashboard");
+      }
     } catch (error) {
       console.error("Auto Login failed ... waiting for custom login");
     }

@@ -1,6 +1,7 @@
 const { VlogModel, UserModel } = require("../models/vlog");
 const {createAndSendToken} = require('../middlewares/auth')
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config({ path: "../.env" });
 
@@ -150,7 +151,13 @@ async function login(req, res) {
       return res.status(401).json({ error: "User not found" });
     }
     if (user.password === password) {
-      createAndSendToken(user, 202, res);
+      const username = user.username;
+      const newUser = new UserModel({
+        username,
+        email,
+        password,
+      })
+      createAndSendToken(newUser, 202, res);
     } else {
       return res.status(401).json({ error: "Invalid credentials" });
     }
