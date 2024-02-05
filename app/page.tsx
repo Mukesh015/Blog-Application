@@ -1,8 +1,6 @@
 "use client"
 import Image from "next/image";
-import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { useState } from 'react';
-import Link from "next/link";
 import { useRouter } from 'next/navigation'
 
 
@@ -11,8 +9,8 @@ export default function Home() {
 
   const [routeid, setRouteid] = useState('');
 
-  const handleSearch=()=>{
-   
+  const handleSearch = () => {
+
     router.push(`/blogs/${routeid}`)
 
   }
@@ -52,7 +50,7 @@ export default function Home() {
                 className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search..."
                 onChange={(e) => setRouteid(e.target.value.toLowerCase())}
-                
+
               />
             </div>
             <button
@@ -187,21 +185,20 @@ export default function Home() {
               Explore starter templates for creating new blogs.
             </p>
           </a>
-          <LoginLink postLoginRedirectURL="/dashboard">
-            <div
-              className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            >
-              <h2 className={`mb-3 text-2xl font-semibold`}>
-                Register / Login{}
-                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                  -&gt;
-                </span>
-              </h2>
-              <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-                If you are not a user, please login first for further processes.
-              </p>
-            </div>
-          </LoginLink>
+          <a 
+            href="/login"
+            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+          >
+            <h2 className={`mb-3 text-2xl font-semibold`}>
+              Register / Login{ }
+              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                -&gt;
+              </span>
+            </h2>
+            <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
+              If you are not a user, please login first for further processes.
+            </p>
+          </a>
         </div>
       </main>
     </>

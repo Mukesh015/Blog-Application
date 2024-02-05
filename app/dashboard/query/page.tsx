@@ -10,9 +10,6 @@ function PostQuery() {
     const [query, setQuery] = useState('');
     const router = useRouter()
 
-
-
-
     const handleSubmit=async(event)=> { 
         event.preventDefault();
         try {
