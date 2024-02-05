@@ -1,10 +1,10 @@
 const { VlogModel, UserModel } = require("../models/vlog");
+const {createAndSendToken} = require('../middlewares/auth')
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-dotenv.config({ path: "../.env.local" });
-const bcrypt = require("bcrypt");
+dotenv.config({ path: "../.env" });
 
-const secretKey = process.env.KINDE_CLIENT_SECRET;
+const secretKey = process.env.JWT_SECRET;
 
 async function newVlogCreate(req, res) {
   const { title, description } = req.body;
@@ -135,8 +135,7 @@ async function register(req, res) {
       password,
     });
     await newUser.save();
-    // createAndSendToken(newUser, 201, res);
-    res.status(201).json({ message: "User created successfully" });
+    createAndSendToken(newUser, 201, res);
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Internal server error" });
@@ -151,13 +150,31 @@ async function login(req, res) {
       return res.status(401).json({ error: "User not found" });
     }
     if (user.password === password) {
-      res.status(200).send({ message: "login successful" });
+      createAndSendToken(user, 202, res);
     } else {
       return res.status(401).json({ error: "Invalid credentials" });
     }
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Internal server error" });
+  }
+}
+
+async function welcome(req,res){
+  res.status(200).json('welcome');
+}
+
+async function decodeJWT(req,res){
+  const token = req.body.token;
+  if (!token) {
+    return res.status(400).json({ error: 'Token not provided' });
+  }
+  try {
+    const decoded = jwt.verify(token, secretKey);
+    const email = decoded.email;
+    res.status(201).json(email);
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token' });
   }
 }
 
@@ -170,4 +187,6 @@ module.exports = {
   getEmail,
   register,
   login,
+  welcome,
+  decodeJWT
 };

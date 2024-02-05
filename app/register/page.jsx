@@ -14,9 +14,13 @@ export default function Register() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({username,email,password})
+        body: JSON.stringify({ username, email, password }),
       });
-      console.log(response.json());
+      if (!response.ok) {
+        throw new Error("User registration failed");
+      }
+      const data = await response.json();
+      document.cookie = `cookie-1 = ${data.token}`;
     } catch (error) {
       console.error("Server error", error);
     }

@@ -1,12 +1,32 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import getCookieValueByName from "../cookie.js";
 
 export default function Login() {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter(); 
+  const router = useRouter();
+
+  const autoLogin = async () => {
+    try {
+      const cookies = getCookieValueByName("cookie-1");
+      const response = await fetch("http://localhost:8080/verifyjwt", {
+        headers: {
+          "Content-Type": "application/json",
+          "cookie-1": cookies,
+        },
+      });
+      if (response.statusCode === 403 || response.statusCode === 401) {
+        throw new Error("Auto Login failed");
+      }
+      const data = await response.json();
+      console.log("Auto Logged in successfully");
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Auto Login failed ... waiting for custom login");
+    }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -16,20 +36,26 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({email,password})
+        body: JSON.stringify({ email, password }),
       });
       if (!response.ok) {
         throw new Error("Login failed");
-      }else{
+      } else {
         const data = await response.json();
-        response.statusCode = 200;
-        console.log(data);
-        router.push("/dashboard");
+
+        if (response.status === 202) {
+          router.push("/dashboard");
+          document.cookie = `cookie-1 = ${data.token}`;
+        }
       }
     } catch (error) {
       console.error("Server", error);
     }
   };
+
+  useEffect(() => {
+    autoLogin();
+  }, []);
 
   return (
     <div className="font-[sans-serif] bg-white text-[#333]">
@@ -59,7 +85,6 @@ export default function Login() {
                     className="w-full text-sm border-b border-gray-300 focus:border-[#333] px-2 py-3 outline-none"
                     placeholder="Enter email"
                     onChange={(e) => setEmail(e.target.value)}
-
                   />
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +130,6 @@ export default function Login() {
                     className="w-full text-sm border-b border-gray-300 focus:border-[#333] px-2 py-3 outline-none"
                     placeholder="Enter password"
                     onChange={(e) => setPassword(e.target.value)}
-
                   />
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

@@ -3,6 +3,11 @@ const mongoose = require('mongoose');
 const StaticRouter = require('./routes/stastic')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const dotenv = require("dotenv");
+dotenv.config({ path: "./.env" });
+
+const DB = process.env.db;
+const PORT = process.env.PORT;
 
 const app = express();
 app.use(cors());
@@ -10,11 +15,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb+srv://Mukesh:Mukesh%402002@learn-mongodb.yxla1ty.mongodb.net/')
+mongoose.connect(DB)
     .then(console.log('Database connected'))
     .catch((error)=>{console.error('Database connection failed',error)})
 
-const PORT = 8080;
 
 app.use('/',StaticRouter)
 
