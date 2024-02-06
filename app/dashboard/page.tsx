@@ -1,9 +1,37 @@
 "use client"
-import dynamic from "next/dynamic";
-
 import React from 'react';
+import getCookieValueByName from "../cookie.js";
+import { useRouter } from "next/navigation";
+import { useEffect } from 'react';
+
 const Dashboard = () => {
-  
+  const router = useRouter();
+
+  async function validation() {
+    const token = await getCookieValueByName("cookie-1");
+    try {
+      const response = await fetch("http://localhost:8080/verifyJWT", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: token }),
+      });
+      if (response.status === 200) {
+        console.log('User loggedin');
+      } else{
+        console.log('You are not eligible to access this route ! Please login first');
+        router.push("/login");
+      }
+    } catch (error) {
+      console.error("Server error autologin failed", error);
+    }
+  }
+  useEffect(() => {
+    validation();
+  }, []);
+
+
   return (
     <>
       <div className="p-4 sm:ml-64">
@@ -128,4 +156,4 @@ const Dashboard = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(Dashboard), { ssr: false })
+export default Dashboard;

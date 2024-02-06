@@ -36,7 +36,6 @@ const createAndSendToken = (user, statusCode, res) => {
 
 async function verifyToken(req, res, next) {
   const token = req.body.token;
-  console.log(token);
 
   if (!token) {
     return res.status(401).json({ error: "Unauthorized user" });
