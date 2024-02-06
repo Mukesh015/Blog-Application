@@ -1,31 +1,31 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import getCookieValueByName from "../cookie.js";
+import cookie from "js-cookie";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const token = cookie.get("cookie-1");
 
   const autoLogin = async () => {
     try {
-      const cookies = getCookieValueByName("cookie-1");
-      const response = await fetch("http://localhost:8080/verifyjwt", {
+      const response = await fetch("http://localhost:8080/verifyJWT", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "cookie-1": cookies,
         },
+        body: JSON.stringify({ token: token }),
       });
-      if (response.statusCode === 403 || response.statusCode === 401) {
-        console.log("Login failed");
-      }
-      if (response.statusCode === 200) {
-        console.log("Auto Logged in successfully");
+      if (!response.ok) {
+        throw new Error("Auto login failed");
+      } else if (response.status === 200) {
+        console.log("Autologin success");
         router.push("/dashboard");
       }
     } catch (error) {
-      console.error("Auto Login failed ... waiting for custom login");
+      console.error("Server error autologin failed", error);
     }
   };
 

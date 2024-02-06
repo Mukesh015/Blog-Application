@@ -1,3 +1,4 @@
+const cookieParser = require("cookie-parser");
 const express = require('express');
 const mongoose = require('mongoose');
 const StaticRouter = require('./routes/stastic')
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 mongoose.connect(DB)
     .then(console.log('Database connected'))

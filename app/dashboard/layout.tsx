@@ -1,6 +1,4 @@
     "use client"
-
-    import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
     export default function DashboardLayout({
         children,
     }: Readonly<{ children: React.ReactNode; }>) {
@@ -113,7 +111,7 @@
                                     <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3" />
                                     </svg>
-                                    <span className="flex-1 items-center cursor-pointer ms-3 whitespace-nowrap"><LogoutLink>Log out</LogoutLink></span>
+                                    <span className="flex-1 items-center cursor-pointer ms-3 whitespace-nowrap">Log out</span>
                                 </li>
                             </ul>
                         </div>

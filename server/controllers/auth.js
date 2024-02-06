@@ -110,20 +110,6 @@ async function addComment(req, res) {
   }
 }
 
-async function getEmail(req, res) {
-  const key = req.body.token;
-  if (!key) {
-    return res.status(400).json({ error: "Token not provided" });
-  }
-  try {
-    const decoded = jwt.verify(key, secretKey);
-    const email = decoded.email;
-    res.status(201).json(email);
-  } catch (error) {
-    res.status(401).json({ error: "Invalid token" });
-  }
-}
-
 async function register(req, res) {
   const { username, email, password } = req.body;
   try {
@@ -179,7 +165,8 @@ async function decodeJWT(req,res){
   try {
     const decoded = jwt.verify(token, secretKey);
     const email = decoded.email;
-    res.status(201).json(email);
+    const username = decoded.username;
+    res.status(201).json({ email: email, username: username });
   } catch (error) {
     res.status(401).json({ error: 'Invalid token' });
   }
@@ -191,7 +178,6 @@ module.exports = {
   postNewQuery,
   getAllBlog,
   addComment,
-  getEmail,
   register,
   login,
   welcome,

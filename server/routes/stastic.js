@@ -8,10 +8,9 @@ StaticRouter.post('/getblog',getBlog)
 StaticRouter.post('/postnewquery',postNewQuery)
 StaticRouter.post('/getallblog',getAllBlog)
 StaticRouter.post('/addcomment',addComment)
-StaticRouter.post('/getEmail',getEmail)
 StaticRouter.post('/register',register)
 StaticRouter.post('/login',login)
-StaticRouter.get('/verifyjwt',verifyToken,welcome);
-StaticRouter.get('/getemail',decodeJWT);
+StaticRouter.post('/verifyjwt',verifyToken,welcome);
+StaticRouter.get('/getuser',decodeJWT);
 
 module.exports = StaticRouter;

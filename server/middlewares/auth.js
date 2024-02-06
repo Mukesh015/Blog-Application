@@ -35,10 +35,11 @@ const createAndSendToken = (user, statusCode, res) => {
 };
 
 async function verifyToken(req, res, next) {
-  const token = req.headers["cookie-1"];
+  const token = req.body.token;
+  console.log(token);
 
   if (!token) {
-    return res.status(403).json({ error: "Unauthorized" });
+    return res.status(401).json({ error: "Unauthorized user" });
   }
 
   jwt.verify(token, secretKey, (err, user) => {
