@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { toast } from "react-toastify";
+
 
 export default function Register() {
   const [username, setuserName] = useState("");
@@ -17,10 +19,32 @@ export default function Register() {
         body: JSON.stringify({ username, email, password }),
       });
       if (!response.ok) {
+        toast.error('User Registration failed',{
+          position:"top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        })
         throw new Error("User registration failed");
       }
-      const data = await response.json();
-      document.cookie = `cookie-1 = ${data.token}`;
+      else{
+        const data = await response.json();
+        document.cookie = `cookie-1 = ${data.token}`;
+        toast.success('User Registration success',{
+          position:"top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        })
+      }
     } catch (error) {
       console.error("Server error", error);
     }

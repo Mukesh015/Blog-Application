@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/blogs/[id]/page.jsx", "app/dashboard/comments/page.jsx", "app/blogs/page.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/blogs/[id]/page.jsx", "app/dashboard/comments/page.jsx", "app/blogs/page.jsx", "app/dashboard/query/page.jsx", "app/dashboard/posts/page.jsx"],
   "exclude": ["node_modules"]
 }

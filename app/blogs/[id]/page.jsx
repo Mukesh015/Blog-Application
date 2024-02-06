@@ -1,30 +1,19 @@
-
 "use client";
-import { useState, useEffect } from "react";
 
-import { useRouter } from "next/navigation";
-import {useKindeAuth} from "@kinde-oss/kinde-auth-react"
-
-
+import { useState,useEffect } from 'react';
+import cookie from 'js-cookie';
 
 
 export default function Blogs({ params }) {
   const query = decodeURIComponent(params.id);
 
-  const [message, setMessage] = useState('');
+  const [description, setDescription] = useState('');
   const [blogData, setBlogData] = useState({ description: [], authorName: [] });
+  const [authorEmail, setAuthorEmail] = useState('');
+  const [authorName, setAuthorName] = useState('')
 
 
-  const handleAddComment=async(e)=>{
-    
-    const { user, isAuthenticated, isLoading } = useKindeAuth();
-    if(isAuthenticated){
-      console.log(user.emailpreferred_email)
-    }
-    else{
-      
-    }
-  }
+  const token = cookie.get('cookie-1');
 
   
   useEffect(() => {
@@ -55,13 +44,66 @@ export default function Blogs({ params }) {
   }, [query]);
 
 
-  const combinedArray = blogData.description.map((description, index) => ({
+  const combinedArray = blogData.description.map((description, idx) => ({
     description,
-    authorName: blogData.authorName[index]
+    authorName: blogData.authorName[idx]
   }));
   
+  useEffect(() => {
+    const fetchEmail=async()=>{
+  try {
+    const fetchedEmail = await fetch('http://localhost:8080/getuser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token }),
+    });
+    const userData = await fetchedEmail.json();
+    
+    // Check if userData and userData.username are defined
+    if (userData && userData.username) {
+      const email = userData.username.email;
+      const name = userData.username.username;
+      setAuthorName(name)
+      setAuthorEmail(email)
+    } else {
+      throw new Error('Failed to fetch user data or username is undefined');
+    }
+  }
+  catch(error)
+  {
+    ("failed to fetch email")
+  }
+}
+fetchEmail()
+}, [token]);
 
 
+  const handleAddComment = async () => {
+    
+  
+      try {
+        const response = await fetch('http://localhost:8080/addcomment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query, authorEmail, authorName, description }),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to fetch comments');
+        }
+  
+        const data = await response.json();
+        setComments(data);
+      } catch (error) {
+        console.error('Failed to add comment', error);
+      }
+    } 
+  
+  console.log(authorName,authorEmail)
 
 
   return (
@@ -74,7 +116,8 @@ export default function Blogs({ params }) {
         </div>
         <div className="mt-10">
         <div>
-            {combinedArray.map((paragraph, index) => (
+        {combinedArray && combinedArray.length > 0 ? (
+            combinedArray.map((paragraph, index) => (
               <p key={index}>
                 <h1>{paragraph.description}</h1>
                 <div style={{ textAlign: 'right' }}>
@@ -82,9 +125,13 @@ export default function Blogs({ params }) {
 
                 </div>
               </p>
-            ))}
+            ))
+        ):
+        (
+            <p>No data Available</p>
+        )}
           </div>
-        
+
       </div>
         <div>
           <form className="max-w-sm mx-auto my-20">
@@ -104,11 +151,11 @@ export default function Blogs({ params }) {
               }}
               className="block p-3.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Write your thoughts here..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               
             ></textarea>
-            <button className="relative inline-flex mt-10 items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={() => handleAddComment()}>
+            <button type="button" className="relative inline-flex mt-10 items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={() => handleAddComment()}>
               <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                 Submit
               </span>

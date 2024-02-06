@@ -2,12 +2,14 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import cookie from "js-cookie";
-
+import { toast } from "react-toastify";
+  
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
   const token = cookie.get("cookie-1");
+
 
   const autoLogin = async () => {
     try {
@@ -19,10 +21,30 @@ export default function Login() {
         body: JSON.stringify({ token: token }),
       });
       if (!response.ok) {
+        toast.error('Auto login failed...',{
+          position:"top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        })
         throw new Error("Auto login failed");
-      } else if (response.status === 200) {
-        console.log("Autologin success");
-        router.push("/dashboard");
+      } 
+      else if (response.status === 200) {
+        toast.success('Auto login success...',{
+          position:"top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        })
+        router.push("/dashboard")
       }
     } catch (error) {
       console.error("Server error autologin failed", error);
@@ -40,6 +62,16 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
       if (!response.ok) {
+        toast.error('Login failed',{
+          position:"top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        })
         throw new Error("Login failed");
       } else {
         const data = await response.json();
@@ -47,6 +79,16 @@ export default function Login() {
         if (response.status === 202) {
           router.push("/dashboard");
           document.cookie = `cookie-1 = ${data.token}`;
+          toast.success('Login success...',{
+            position:"top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'dark',
+          })  
         }
       }
     } catch (error) {

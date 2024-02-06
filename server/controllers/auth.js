@@ -39,23 +39,32 @@ async function postNewQuery(req, res) {
 
 async function getBlog(req, res) {
   const { query } = req.body;
+  console.log(query);
 
   try {
-    const result = await VlogModel.findOne({ query: query });
+      const existquery = await VlogModel.findOne({ query: query });
 
-    if (result) {
-      const description = result.description;
-      res.status(200).json({ description: description });
-    } else {
-      res.status(404).json({ message: `${query} not found` });
-    }
+      if (existquery) {
+          const keysToExtract = ["description", "authorName"];
+          
+          const extractedData = {};
+          
+          keysToExtract.forEach(key => {
+              if (existquery[key] !== undefined) {
+                  extractedData[key] = existquery[key];
+              }
+          });
+
+          res.status(200).json(extractedData);
+      } else {
+          res.status(404).json({ msg: "No documents found" });
+      }
   } catch (error) {
-    console.error("Error retrieving blog description:", error);
-    res
-      .status(500)
-      .json({ message: "Failed to retrieve blog description! Server error" });
+      console.error("Retrieve operation failed!", error);
+      res.status(500).json({ msg: "Internal Server Error" });
   }
 }
+
 
 async function getAllBlog(req, res) {
   try {
@@ -159,6 +168,7 @@ async function welcome(req,res){
 
 async function decodeJWT(req,res){
   const token = req.body.token;
+  console.log('try to extract email')
   if (!token) {
     return res.status(400).json({ error: 'Token not provided' });
   }
@@ -172,6 +182,48 @@ async function decodeJWT(req,res){
   }
 }
 
+
+async function getComments(req, res) {
+  const { authorEmail } = req.body;
+  console.log("Try to fetch your posts from " + authorEmail);
+
+  try {
+    const result = await VlogModel.find({
+      "authorEmail": { $exists: true, $ne: [] },
+      "authorEmail": authorEmail
+    });
+
+    if (result.length > 0) {
+      const extractedData = result.map(resultItem => {
+        const descriptions = [];
+        const query = [];
+
+        resultItem.authorEmail.forEach((email, index) => {
+          if (email === authorEmail && resultItem.description && resultItem.description[index] !== undefined) {
+            const updatedAt = resultItem.updatedAt; // Assuming the timestamp field is named "createdAt"
+            const timestamp = new Date(updatedAt).toLocaleString("en-US", { timeZone: "Asia/Kolkata" }); // Generate timestamp for this description
+            descriptions.push({ index, description: resultItem.description[index], timestamp });
+            query.push({ query: resultItem.query });
+          }
+        });
+
+        return { query, descriptions };
+      });
+
+      res.status(200).json(extractedData);
+    } else {
+      res.status(404).json({ msg: "No documents found" });
+    }
+  } catch (error) {
+    console.error("Retrieve operation failed!", error);
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+}
+
+
+
+
+
 module.exports = {
   newVlogCreate,
   getBlog,
@@ -181,5 +233,6 @@ module.exports = {
   register,
   login,
   welcome,
-  decodeJWT
+  decodeJWT,
+  getComments
 };
