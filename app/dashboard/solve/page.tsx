@@ -2,13 +2,20 @@
 import React from 'react';
 import getCookieValueByName from "../../cookie.js";
 import { useRouter } from "next/navigation";
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Error503 from "../../error503.jsx"
 
 const Solve = () => {
+  const [error, setError] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const router = useRouter();
+
+  const handleButtonClick = () => {
+    setShowToast(true);
+  };
+
   async function validation() {
     const token = await getCookieValueByName("cookie-1");
     try {
@@ -26,16 +33,33 @@ const Solve = () => {
         router.push("/login");
       }
     } catch (error) {
+      setError(true);
       console.error("Server error autologin failed", error);
     }
   }
   useEffect(() => {
     validation();
-  }, []);
+    if (showToast) {
+      toast.success('Query posted',{
+        position:"top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      })
+      setShowToast(false);
+    }
+  }, [showToast]);
+  if(error){
+    return <Error503 />
+  }
 
   return (
     <>
-      <form className="max-w-sm mx-auto my-20">
+      <form className="max-w-sm mx-auto my-20" onSubmit={handleButtonClick}>
         <div>
           <label
             htmlFor="small-input"

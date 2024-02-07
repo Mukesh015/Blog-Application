@@ -221,6 +221,70 @@ async function getComments(req, res) {
 }
 
 
+async function getPosts(req, res) {
+  const { senderEmail } = req.body;
+  console.log('try fetch post from ',senderEmail)
+  try {
+    const posts = await VlogModel.find({senderEmail:senderEmail});
+    if (posts.length > 0) {
+      const keysToExtract = ["query"];
+
+      const extractedData = posts.map((posts) => {
+        const extractedUser = {};
+
+        keysToExtract.forEach((key) => {
+          if (posts[key] !== undefined) {
+            extractedUser[key] = posts[key];
+          }
+        });
+
+        return extractedUser;
+      });
+
+      res.status(200).json(extractedData);
+    } else {
+      res.status(404).json({ msg: "No documents found" });
+    }
+  }
+  catch(error){
+    console.error("Retrieve operation failed!", error);
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+
+}
+
+
+
+async function getInboxes(req, res) {
+  const { senderEmail } = req.body;
+  console.log(`Try to fetch ${senderEmail} Inboxes`);
+
+  try {
+    const existInboxes = await VlogModel.find({ senderEmail: senderEmail });
+
+    if (existInboxes.length > 0) {
+      const keysToExtract = ["query", "description", "authorName"];
+      
+      const extractedData = existInboxes.map(inbox => {
+        const extracted = {};
+        keysToExtract.forEach(key => {
+          if (inbox[key] !== undefined) {
+            extracted[key] = inbox[key];
+          }
+        });
+        return extracted;
+      });
+
+      res.status(200).json(extractedData);
+    } else {
+      res.status(404).json({ msg: "No documents found" });
+    }
+  } catch (error) {
+    console.error("Retrieve operation failed!", error);
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+}
+
 
 
 
@@ -234,5 +298,7 @@ module.exports = {
   login,
   welcome,
   decodeJWT,
-  getComments
+  getComments,
+  getPosts,
+  getInboxes
 };

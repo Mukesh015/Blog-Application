@@ -2,37 +2,13 @@
 import { useState, useEffect } from "react";
 import cookie from 'js-cookie';
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
-import 'react-toastify/dist/ReactToastify.css';
 
 const Post = () => {
   const [senderEmail, setSenderEmail] = useState('');
   const [posts, setPosts] = useState([]);
   const token = cookie.get('cookie-1');
-  const router = useRouter();
-
-  async function validation() {
-    try {
-        const response = await fetch("http://localhost:8080/verifyJWT", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token: token }),
-        });
-        if (response.status === 200) {
-            console.log('User loggedin');
-        } else {
-            console.log('You are not eligible to access this route ! Please login first');
-            router.push("/login");
-        }
-    } catch (error) {
-        console.error("Server error autologin failed", error);
-    }
-}
 
   useEffect(() => {
-    validation();
     const fetchEmailPosts = async () => {
       try {
         const fetchedEmail = await fetch('http://localhost:8080/getuser', {
@@ -73,7 +49,7 @@ const Post = () => {
       }
     };
     fetchEmailPosts();
-  }, [token,senderEmail]); // Empty dependency array to run the effect only once on mount
+  }, [token,senderEmail]);
 
   return (
     <>

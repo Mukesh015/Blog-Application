@@ -2,7 +2,8 @@
 import React from 'react';
 import getCookieValueByName from "../cookie.js";
 import { useRouter } from "next/navigation";
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
+
 
 const Dashboard = () => {
   const router = useRouter();
@@ -30,7 +31,6 @@ const Dashboard = () => {
   useEffect(() => {
     validation();
   }, []);
-
 
   return (
     <>

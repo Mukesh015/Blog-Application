@@ -1,12 +1,15 @@
 "use client";
-
+import Error503 from "../../error503.jsx"
+import Error404 from "../../error404.jsx"
 import { useState,useEffect } from 'react';
 import cookie from 'js-cookie';
 
 
 export default function Blogs({ params }) {
   const query = decodeURIComponent(params.id);
-
+  
+  const [serviceError, setserviceError] = useState(false);
+  const [notFoundError, setnotFoundError] = useState(false);
   const [description, setDescription] = useState('');
   const [blogData, setBlogData] = useState({ description: [], authorName: [] });
   const [authorEmail, setAuthorEmail] = useState('');
@@ -28,6 +31,7 @@ export default function Blogs({ params }) {
         });
 
         if (!response.ok) {
+          setnotFoundError(true);
           throw new Error("Description fetching failed 1");
         }
 
@@ -36,7 +40,8 @@ export default function Blogs({ params }) {
         setBlogData(data)
 
       } catch (error) {
-        console.error("Description fetching failed 2", error);
+        setserviceError(true);
+        console.error("Description fetching failed", error);
       }
     };
 
@@ -104,6 +109,13 @@ fetchEmail()
     } 
   
   console.log(authorName,authorEmail)
+
+  if (serviceError) {
+    return <Error503 />;
+  }
+  else if(notFoundError) {
+    return <Error404 />;
+  }
 
 
   return (

@@ -1,9 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Error503 from "../error503.jsx"
+
 
 export default function Blogs() {
   const [result, setResult] = useState([]);
+  const [error, setError] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -17,6 +20,7 @@ export default function Blogs() {
         });
 
         if (!response.ok) {
+          setError(true);
           throw new Error("Description fetching failed");
         }
 
@@ -24,6 +28,7 @@ export default function Blogs() {
 
         setResult(data);
       } catch (error) {
+        setError(true);
         console.error("Description fetching failed", error);
       }
     };
@@ -34,7 +39,9 @@ export default function Blogs() {
   const handleReadMore = async (id) => {
     router.push(`/blogs/${id}`);
   };
-
+  if (error) {
+    return <Error503 />;
+  }
   return (
     <>
       <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto mt-20">

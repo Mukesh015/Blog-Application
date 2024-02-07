@@ -6,12 +6,19 @@ import getCookieValueByName from "../../cookie.js";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Error503 from "../../error503.jsx"
 
 function PostQuery() {
+  const [showToast, setShowToast] = useState(false);
+  const [error, setError] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [query, setQuery] = useState("");
   const router = useRouter();
+
+  const handleButtonClick = () => {
+    setShowToast(true);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -25,33 +32,15 @@ function PostQuery() {
       });
 
       if (!response.ok) {
-        toast.error('Post operation failed',{
-          position:"top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        })
         throw new Error("failed to  post query");
       }
 
       const data = await response.json();
       console.log(data);
-      toast.success('Query posted',{
-        position:"top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'dark',
-      })
+      
       router.push("/dashboard");
     } catch (error) {
+      setError(true);
       console.error("failed to  post query  2", error);
     }
   };
@@ -79,11 +68,27 @@ function PostQuery() {
   }
   useEffect(() => {
     validation();
-  }, []);
+    if (showToast) {
+      toast.success('Query posted',{
+        position:"top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      })
+      setShowToast(false);
+    }
+  }, [showToast]);
+  if(error){
+    return <Error503 />
+  }
 
   return (
     <div className="my-20">
-      <form className="max-w-sm mx-auto ">
+      <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
         <div className="mb-5">
           <label
             htmlFor="text"
@@ -135,7 +140,7 @@ function PostQuery() {
         <button
           type="submit"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
-          onClick={handleSubmit}
+          onClick={handleButtonClick}
         >
           Submit
         </button>
