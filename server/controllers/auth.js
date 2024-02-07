@@ -168,7 +168,7 @@ async function welcome(req,res){
 
 async function decodeJWT(req,res){
   const token = req.body.token;
-  console.log('try to extract email')
+  // console.log('try to extract email')
   if (!token) {
     return res.status(400).json({ error: 'Token not provided' });
   }
@@ -185,7 +185,7 @@ async function decodeJWT(req,res){
 
 async function getComments(req, res) {
   const { authorEmail } = req.body;
-  console.log("Try to fetch your posts from " + authorEmail);
+  // console.log("Try to fetch your posts from " + authorEmail);
 
   try {
     const result = await VlogModel.find({
