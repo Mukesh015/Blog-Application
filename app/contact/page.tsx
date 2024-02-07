@@ -1,8 +1,24 @@
+"use client"
 import React from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ContactSection = () => {
+  const notify = () => {
+    toast.success('Message sent successfully!', {
+      theme: 'dark',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable:true,
+      position: 'top-right'
+    });
+  };
+
   return (
     <section className="bg-blue-50 dark:bg-slate-800" id="contact">
+      <ToastContainer />
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div className="mb-4">
           <div className="mb-6 max-w-3xl text-center sm:text-center md:mx-auto md:mb-12">
@@ -83,7 +99,10 @@ const ContactSection = () => {
             </div>
             <div className="card h-fit max-w-6xl p-5 md:p-12" id="form">
               <h2 className="mb-4 text-2xl font-bold">Ready to Get Started?</h2>
-              <form id="contactForm">
+              <form id="contactForm" onSubmit={(e) => {
+                e.preventDefault();
+                notify();
+              }}>
                 <div className="mb-6">
                   <div className="mx-0 mb-1 sm:mb-4">
                     <div className="mx-0 mb-1 sm:mb-4">

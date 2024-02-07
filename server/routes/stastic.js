@@ -1,6 +1,6 @@
 const express = require('express');
 const {newVlogCreate,getBlog,postNewQuery,getAllBlog,addComment,
-    register,login,welcome,decodeJWT,getComments,getPosts,getInboxes} = require('../controllers/auth')
+    getEmail,register,login,welcome,decodeJWT,getComments,getPosts,getInboxes,getPopularBlog} = require('../controllers/auth')
 const {createAndSendToken,verifyToken} = require('../middlewares/auth')
 const StaticRouter = express.Router();
 
@@ -16,6 +16,7 @@ StaticRouter.post('/getuser',decodeJWT);
 StaticRouter.post('/getcomments',getComments);
 StaticRouter.post('/getposts',getPosts);
 StaticRouter.post('/getinboxes',getInboxes);
+StaticRouter.post('/getpopularblog',getPopularBlog);
 
 
 

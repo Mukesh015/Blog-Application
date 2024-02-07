@@ -68,17 +68,17 @@ async function getBlog(req, res) {
 
 async function getAllBlog(req, res) {
   try {
-    const queries = await VlogModel.find({});
+    const popularBlog = await VlogModel.find({});
 
-    if (queries.length > 0) {
+    if (popularBlog.length > 0) {
       const keysToExtract = ["query", "description", "authorName"];
 
-      const extractedData = queries.map((queries) => {
+      const extractedData = popularBlog.map((popularBlog) => {
         const extractedUser = {};
 
         keysToExtract.forEach((key) => {
-          if (queries[key] !== undefined) {
-            extractedUser[key] = queries[key];
+          if (popularBlog[key] !== undefined) {
+            extractedUser[key] = popularBlog[key];
           }
         });
 
@@ -287,6 +287,40 @@ async function getInboxes(req, res) {
 
 
 
+async function getPopularBlog(req,res){
+
+  console.log('try to fetch popular Blog')
+
+  try {
+    const popularBlog = await VlogModel.find({});
+
+    if (popularBlog.length > 0) {
+      const keysToExtract = ["query", "description"];
+
+      const extractedData = popularBlog.map((popularBlog) => {
+        const extractedUser = {};
+
+        keysToExtract.forEach((key) => {
+          if (popularBlog[key] !== undefined) {
+            extractedUser[key] = popularBlog[key];
+          }
+        });
+
+        return extractedUser;
+      });
+
+      res.status(200).json(extractedData);
+    } else {
+      res.status(404).json({ msg: "No documents found" });
+    }
+  } catch (error) {
+    console.error("Retrieve operation failed!", error);
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+
+}
+
+
 
 module.exports = {
   newVlogCreate,
@@ -300,5 +334,6 @@ module.exports = {
   decodeJWT,
   getComments,
   getPosts,
-  getInboxes
+  getInboxes,
+  getPopularBlog
 };

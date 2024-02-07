@@ -1,20 +1,15 @@
 "use client";
-import { ToastContainer, toast } from "react-toastify";
 import { useState, useEffect } from "react";
-import "react-toastify/dist/ReactToastify.css";
 import cookie from "js-cookie";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Inbox = () => {
-  const notify = () => toast("This is a toast notification !");
   const [senderEmail, setSenderEmail] = useState("");
   const [authorName, setAuthorName] = useState("");
-  const [showToast, setShowToast] = useState(false);
   const [inboxes, setInboxes] = useState("");
   const token = cookie.get("cookie-1");
 
-  const handleButtonClick = () => {
-    setShowToast(true);
-  };
   const fetchEmailInboxes = async () => {
     try {
       const fetchedEmail = await fetch("http://localhost:8080/getuser", {
@@ -43,38 +38,65 @@ const Inbox = () => {
           body: JSON.stringify({ senderEmail }),
         });
         if (!response.ok) {
+          toast.error("Failed to inbox messages", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "dark",
+          });
           throw new Error("Failed to fetch Inboxes");
         }
-
         const data = await response.json();
         setInboxes(data);
       } catch (error) {
-        console.log("failed to fetch email", error);
-      }
-    } catch (error) {
-      console.log("failed to fetch your inboxes");
-    }
-  };
-
-  useEffect(() => {
-    fetchEmailInboxes();
-    if (showToast) {
-        toast.success('Query posted',{
-          position:"top-right",
+        toast.error("Failed to inbox messages", {
+          position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        })
-        setShowToast(false);
+          theme: "dark",
+        });
+        console.log("failed to fetch email", error);
       }
-  }, [token, senderEmail,showToast]);
+    } catch (error) {
+      toast.error("Failed to inbox messages", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark",
+      });
+      console.log("failed to fetch your inboxes");
+    }
+  };
+
+  const notify = () => {
+    console.log("toast received");
+    toast.success("Message submitted successfully!", {
+      theme: "dark",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      position: "top-right",
+    });
+  };
+
+  useEffect(() => {
+    fetchEmailInboxes();
+  }, [token, senderEmail]);
 
   return (
     <>
+      <ToastContainer />
       <div className="mt-28 ml-80 mr-60">
         {inboxes && inboxes.length > 0 ? (
           inboxes.map((inbox, index) => (
@@ -99,7 +121,6 @@ const Inbox = () => {
           <form className="max-w-sm mx-auto my-20">
             <textarea
               id="message"
-              onSubmit={handleButtonClick}
               style={{
                 height: "auto",
                 width: "100%",
@@ -109,18 +130,21 @@ const Inbox = () => {
               placeholder="Reply..."
             ></textarea>
             <button
-              onClick={notify}
+              onClick={(e) => {
+                e.preventDefault();
+                notify();
+              }}
               className="relative inline-flex mt-10 items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800"
             >
               <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                 Submit
               </span>
             </button>
-            <ToastContainer />
           </form>
         </div>
       </div>
     </>
   );
 };
+
 export default Inbox;
