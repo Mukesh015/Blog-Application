@@ -6,19 +6,12 @@ import getCookieValueByName from "../../cookie.js";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Error503 from "../../error503.jsx"
 
 function PostQuery() {
-  const [showToast, setShowToast] = useState(false);
-  const [error, setError] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [query, setQuery] = useState("");
   const router = useRouter();
-
-  const handleButtonClick = () => {
-    setShowToast(true);
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,18 +25,34 @@ function PostQuery() {
       });
 
       if (!response.ok) {
-        throw new Error("failed to  post query");
+        throw new Error("Failed to post query");
       }
 
       const data = await response.json();
       console.log(data);
-      
-      router.push("/dashboard");
+      toast.success("Query submitted successfully!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (error) {
-      setError(true);
-      console.error("failed to  post query  2", error);
+      console.error("Failed to post query", error);
+      toast.error("Failed to submit query. Please try again later.", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
+
   async function validation() {
     const token = await getCookieValueByName("cookie-1");
     try {
@@ -68,23 +77,7 @@ function PostQuery() {
   }
   useEffect(() => {
     validation();
-    if (showToast) {
-      toast.success('Query posted',{
-        position:"top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'dark',
-      })
-      setShowToast(false);
-    }
-  }, [showToast]);
-  if(error){
-    return <Error503 />
-  }
+  }, []);
 
   return (
     <div className="my-20">
@@ -140,7 +133,6 @@ function PostQuery() {
         <button
           type="submit"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
-          onClick={handleButtonClick}
         >
           Submit
         </button>

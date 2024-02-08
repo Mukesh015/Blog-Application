@@ -2,19 +2,41 @@
 
 import React from "react";
 import { toast } from "react-toastify";
+import { useState,useEffect } from "react";
 
 function FeedbackSection() {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
 
-  const toastAnimation = () => {
-    toast.success("Thanks for your feedback!", {
-      position: "top-center",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+  
+
+  const toastAnimation = async() => {
+    try {
+      const response = await fetch('http://localhost:8080/submitfeedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email,message }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add your feedback ');
+      }
+
+      toast.success("Thanks for your feedback!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } catch (error) {
+      console.error('Failed to add comment', error);
+    }
+    
   };
 
   return (
@@ -56,6 +78,8 @@ function FeedbackSection() {
                             className="border-0 px-3 py-3 rounded text-sm shadow w-full bg-gray-300 placeholder-black text-gray-800 outline-none focus:bg-gray-400"
                             placeholder=" "
                             style={{ transition: "all 0.15s ease 0s" }}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             required
                           />
                         </div>
@@ -74,6 +98,8 @@ function FeedbackSection() {
                             cols="80"
                             className="border-0 px-3 py-3 bg-gray-300 placeholder-black text-gray-800 rounded text-sm shadow focus:outline-none w-full"
                             placeholder=""
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
                             required
                           ></textarea>
                         </div>
@@ -82,7 +108,7 @@ function FeedbackSection() {
                             onClick={toastAnimation}
                             id="feedbackBtn"
                             className="bg-yellow-300 text-black text-center mx-auto active:bg-yellow-400 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-                            type="submit"
+                            type="button"
                             style={{ transition: "all 0.15s ease 0s" }}
                           >
                             Submit

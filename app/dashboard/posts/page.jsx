@@ -1,7 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
 import cookie from 'js-cookie';
-import dynamic from "next/dynamic";
 
 const Post = () => {
   const [senderEmail, setSenderEmail] = useState('');
@@ -54,7 +53,7 @@ const Post = () => {
   return (
     <>
       <div className="mt-20 ml-80 mr-20">
-        {posts && posts.length > 0 ? (
+          {posts && posts.length > 0 ? (
           posts.map((paragraph, index) => (
             <div key={index} className="mb-4 font-semibold cursor-pointer hover:text-blue-500 mt-10">
               <p>{paragraph.query}</p>
@@ -69,4 +68,4 @@ const Post = () => {
   );
 }
 
-export default dynamic(() => Promise.resolve(Post), { ssr: false });
+export default Post;

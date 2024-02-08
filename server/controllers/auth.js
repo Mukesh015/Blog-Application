@@ -1,4 +1,4 @@
-const { VlogModel, UserModel } = require("../models/vlog");
+const { VlogModel, UserModel,FeedbackModel,ContactModel } = require("../models/vlog");
 const {createAndSendToken} = require('../middlewares/auth')
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
@@ -168,7 +168,7 @@ async function welcome(req,res){
 
 async function decodeJWT(req,res){
   const token = req.body.token;
-  // console.log('try to extract email')
+  console.log('try to extract email')
   if (!token) {
     return res.status(400).json({ error: 'Token not provided' });
   }
@@ -185,7 +185,7 @@ async function decodeJWT(req,res){
 
 async function getComments(req, res) {
   const { authorEmail } = req.body;
-  // console.log("Try to fetch your posts from " + authorEmail);
+  console.log("Try to fetch your posts from " + authorEmail);
 
   try {
     const result = await VlogModel.find({
@@ -320,6 +320,111 @@ async function getPopularBlog(req,res){
 
 }
 
+async function getAllquery(req,res){
+  try {
+    const allQuery = await VlogModel.find({});
+
+    if (allQuery.length > 0) {
+      const keysToExtract = ["query"];
+
+      const extractedData = allQuery.map((allQuery) => {
+        const extractedUser = {};
+
+        keysToExtract.forEach((key) => {
+          if (allQuery[key] !== undefined) {
+            extractedUser[key] = allQuery[key];
+          }
+        });
+
+        return extractedUser;
+      });
+
+      res.status(200).json(extractedData);
+    } else {
+      res.status(404).json({ msg: "No documents found" });
+    }
+  } catch (error) {
+    console.error("Retrieve operation failed!", error);
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+}
+
+
+
+async function getSolvequery(req,res){
+  const {senderEmail}=req.body
+  try {
+    const solveQuery = await VlogModel.find({ senderEmail: { $ne: senderEmail } });
+
+    if (solveQuery.length > 0) {
+      const keysToExtract = ["query"];
+
+      const extractedData = solveQuery.map((solveQuery) => {
+        const extractedUser = {};
+
+        keysToExtract.forEach((key) => {
+          if (solveQuery[key] !== undefined) {
+            extractedUser[key] = solveQuery[key];
+          }
+        });
+
+        return extractedUser;
+      });
+
+      res.status(200).json(extractedData);
+    } else {
+      res.status(404).json({ msg: "No documents found" });
+    }
+  } catch (error) {
+    console.error("Retrieve operation failed!", error);
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+}
+
+async function submitFeedback(req,res){
+{
+  const {  email, message } = req.body;
+  try {
+    console.log(
+      `Received data: Email - ${email},Message - ${message}`
+    );
+    const newFeedback = new FeedbackModel({
+ 
+      email,
+      message,
+    });
+    await newFeedback.save();
+    createAndSendToken(newFeedback, 201, res);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+}
+}
+
+async function submitISsues(req,res){
+
+  const { name, email, issue } = req.body;
+  try {
+    console.log(
+      `Received data: Name - ${name},Email - ${email},Issues - ${issue}`
+    );
+    const newIssue = new ContactModel({
+      name,
+      email,
+      issue,
+    });
+    await newIssue.save();
+    createAndSendToken(newIssue, 201, res);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+
+}
+
+
+
 
 
 module.exports = {
@@ -335,5 +440,9 @@ module.exports = {
   getComments,
   getPosts,
   getInboxes,
-  getPopularBlog
+  getPopularBlog,
+  getAllquery,
+  getSolvequery,
+  submitFeedback,
+  submitISsues
 };

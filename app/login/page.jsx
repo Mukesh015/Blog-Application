@@ -3,15 +3,24 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import cookie from "js-cookie";
 import { toast } from "react-toastify";
-  
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
   const token = cookie.get("cookie-1");
 
-
   const autoLogin = async () => {
+    toast.info("Trying to autologin ...", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
     try {
       const response = await fetch("http://localhost:8080/verifyJWT", {
         method: "POST",
@@ -21,30 +30,31 @@ export default function Login() {
         body: JSON.stringify({ token: token }),
       });
       if (!response.ok) {
-        toast.error('Auto login failed...',{
-          position:"top-center",
+        toast.error("Auto login failed...", {
+          position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        })
+          theme: "dark",
+        });
         throw new Error("Auto login failed");
-      } 
-      else if (response.status === 200) {
-        toast.success('Auto login success...',{
-          position:"top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        })
-        router.push("/dashboard")
+      } else if (response.status === 200) {
+          toast.success("Auto login success...", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          setTimeout(() => {
+            router.push("/dashboard");
+          }, 1500);
       }
     } catch (error) {
       console.error("Server error autologin failed", error);
@@ -62,16 +72,16 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
       if (!response.ok) {
-        toast.error('Login failed',{
-          position:"top-center",
+        toast.error("Login failed", {
+          position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        })
+          theme: "dark",
+        });
         throw new Error("Login failed");
       } else {
         const data = await response.json();
@@ -79,16 +89,16 @@ export default function Login() {
         if (response.status === 202) {
           router.push("/dashboard");
           document.cookie = `cookie-1 = ${data.token}`;
-          toast.success('Login success...',{
-            position:"top-center",
+          toast.success("Login success...", {
+            position: "top-center",
             autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'dark',
-          })  
+            theme: "dark",
+          });
         }
       }
     } catch (error) {

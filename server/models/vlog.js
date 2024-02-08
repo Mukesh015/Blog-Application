@@ -45,11 +45,52 @@ const UserSchema = new mongoose.Schema(
         timestamps:true
     }
 )
+const FeedbackSchema = new mongoose.Schema(
+    {
+        
+        email : {
+            type:String,
+            required : true,
+            unique:true
+        },
+        message : {
+            type:String,
+            required : true
+        }
+    },
+    {
+        timestamps:true
+    }
+)
+const ContactSchema = new mongoose.Schema(
+    {
+        name:{
+            type:String,
+            required : true,
+        },
+        email : {
+            type:String,
+            required : true,
+            unique:true
+        },
+        issue : {
+            type:String,
+            required : true
+        }
+    },
+    {
+        timestamps:true
+    }
+)
 
 const VlogModel = mongoose.model('Blog-App', vlogSchema);
 const UserModel = mongoose.model('Users', UserSchema);
+const FeedbackModel = mongoose.model('Blog-App-Feedback', FeedbackSchema);
+const ContactModel = mongoose.model('Blog-App-Contact', ContactSchema);
 
 module.exports = {
     VlogModel,
-    UserModel
+    UserModel,
+    FeedbackModel,
+    ContactModel
 }

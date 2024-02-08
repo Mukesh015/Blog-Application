@@ -1,11 +1,31 @@
 "use client"
 import React from 'react';
+import { useState,useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ContactSection = () => {
-  const notify = () => {
-    toast.success('Message sent successfully!', {
+ 
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [issue, SetIssue] = useState('');
+
+
+
+  const notify =async () => {
+    try {
+      const response = await fetch('http://localhost:8080/submitissues', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name,email,issue }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to take your request ');
+      }
+    toast.success('Issue sent successfully!', {
       theme: 'dark',
       autoClose: 3000,
       hideProgressBar: false,
@@ -14,6 +34,9 @@ const ContactSection = () => {
       draggable:true,
       position: 'top-right'
     });
+  } catch (error) {
+    console.error('Failed to add comment', error);
+  }
   };
 
   return (
@@ -108,12 +131,18 @@ const ContactSection = () => {
                     <div className="mx-0 mb-1 sm:mb-4">
                       <label htmlFor="name" className="pb-1 text-xs uppercase tracking-wider"></label>
                       <input type="text" id="name" autoComplete="given-name" placeholder="Your name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
                         className="mb-2 w-full rounded-md border border-gray-400 py-2 pl-2 pr-4 shadow-md dark:text-gray-300 sm:mb-0"
                         name="name" />
                     </div>
                     <div className="mx-0 mb-1 sm:mb-4">
                       <label htmlFor="email" className="pb-1 text-xs uppercase tracking-wider"></label>
                       <input type="email" id="email" autoComplete="email" placeholder="Your email address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
                         className="mb-2 w-full rounded-md border border-gray-400 py-2 pl-2 pr-4 shadow-md dark:text-gray-300 sm:mb-0"
                         name="email" />
                     </div>
@@ -121,6 +150,9 @@ const ContactSection = () => {
                   <div className="mx-0 mb-1 sm:mb-4">
                     <label htmlFor="textarea" className="pb-1 text-xs uppercase tracking-wider"></label>
                     <textarea id="textarea" name="textarea" placeholder="Write your message..."
+                    value={issue}
+                    onChange={(e) => SetIssue(e.target.value)}
+                    required
                       className="mb-2 w-full rounded-md border border-gray-400 py-2 pl-2 pr-4 shadow-md dark:text-gray-300 sm:mb-0"></textarea>
                   </div>
                 </div>
