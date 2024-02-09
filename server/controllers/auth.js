@@ -1,7 +1,11 @@
-const { VlogModel, UserModel,FeedbackModel,ContactModel } = require("../models/vlog");
-const {createAndSendToken} = require('../middlewares/auth')
+const {
+  VlogModel,
+  UserModel,
+  FeedbackModel,
+  ContactModel,
+} = require("../models/vlog");
+const { createAndSendToken, transporter } = require("../middlewares/auth");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config({ path: "../.env" });
 
@@ -42,29 +46,28 @@ async function getBlog(req, res) {
   console.log(query);
 
   try {
-      const existquery = await VlogModel.findOne({ query: query });
+    const existquery = await VlogModel.findOne({ query: query });
 
-      if (existquery) {
-          const keysToExtract = ["description", "authorName"];
-          
-          const extractedData = {};
-          
-          keysToExtract.forEach(key => {
-              if (existquery[key] !== undefined) {
-                  extractedData[key] = existquery[key];
-              }
-          });
+    if (existquery) {
+      const keysToExtract = ["description", "authorName"];
 
-          res.status(200).json(extractedData);
-      } else {
-          res.status(404).json({ msg: "No documents found" });
-      }
+      const extractedData = {};
+
+      keysToExtract.forEach((key) => {
+        if (existquery[key] !== undefined) {
+          extractedData[key] = existquery[key];
+        }
+      });
+
+      res.status(200).json(extractedData);
+    } else {
+      res.status(404).json({ msg: "No documents found" });
+    }
   } catch (error) {
-      console.error("Retrieve operation failed!", error);
-      res.status(500).json({ msg: "Internal Server Error" });
+    console.error("Retrieve operation failed!", error);
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 }
-
 
 async function getAllBlog(req, res) {
   try {
@@ -151,7 +154,7 @@ async function login(req, res) {
         username,
         email,
         password,
-      })
+      });
       createAndSendToken(newUser, 202, res);
     } else {
       return res.status(401).json({ error: "Invalid credentials" });
@@ -162,15 +165,15 @@ async function login(req, res) {
   }
 }
 
-async function welcome(req,res){
-  res.status(200).json('welcome');
+async function welcome(req, res) {
+  res.status(200).json("welcome");
 }
 
-async function decodeJWT(req,res){
+async function decodeJWT(req, res) {
   const token = req.body.token;
-  console.log('try to extract email')
+  console.log("try to extract email");
   if (!token) {
-    return res.status(400).json({ error: 'Token not provided' });
+    return res.status(400).json({ error: "Token not provided" });
   }
   try {
     const decoded = jwt.verify(token, secretKey);
@@ -178,10 +181,9 @@ async function decodeJWT(req,res){
     const username = decoded.username;
     res.status(201).json({ email: email, username: username });
   } catch (error) {
-    res.status(401).json({ error: 'Invalid token' });
+    res.status(401).json({ error: "Invalid token" });
   }
 }
-
 
 async function getComments(req, res) {
   const { authorEmail } = req.body;
@@ -189,20 +191,30 @@ async function getComments(req, res) {
 
   try {
     const result = await VlogModel.find({
-      "authorEmail": { $exists: true, $ne: [] },
-      "authorEmail": authorEmail
+      authorEmail: { $exists: true, $ne: [] },
+      authorEmail: authorEmail,
     });
 
     if (result.length > 0) {
-      const extractedData = result.map(resultItem => {
+      const extractedData = result.map((resultItem) => {
         const descriptions = [];
         const query = [];
 
         resultItem.authorEmail.forEach((email, index) => {
-          if (email === authorEmail && resultItem.description && resultItem.description[index] !== undefined) {
+          if (
+            email === authorEmail &&
+            resultItem.description &&
+            resultItem.description[index] !== undefined
+          ) {
             const updatedAt = resultItem.updatedAt; // Assuming the timestamp field is named "createdAt"
-            const timestamp = new Date(updatedAt).toLocaleString("en-US", { timeZone: "Asia/Kolkata" }); // Generate timestamp for this description
-            descriptions.push({ index, description: resultItem.description[index], timestamp });
+            const timestamp = new Date(updatedAt).toLocaleString("en-US", {
+              timeZone: "Asia/Kolkata",
+            }); // Generate timestamp for this description
+            descriptions.push({
+              index,
+              description: resultItem.description[index],
+              timestamp,
+            });
             query.push({ query: resultItem.query });
           }
         });
@@ -220,12 +232,11 @@ async function getComments(req, res) {
   }
 }
 
-
 async function getPosts(req, res) {
   const { senderEmail } = req.body;
-  console.log('try fetch post from ',senderEmail)
+  console.log("try fetch post from ", senderEmail);
   try {
-    const posts = await VlogModel.find({senderEmail:senderEmail});
+    const posts = await VlogModel.find({ senderEmail: senderEmail });
     if (posts.length > 0) {
       const keysToExtract = ["query"];
 
@@ -245,15 +256,11 @@ async function getPosts(req, res) {
     } else {
       res.status(404).json({ msg: "No documents found" });
     }
-  }
-  catch(error){
+  } catch (error) {
     console.error("Retrieve operation failed!", error);
     res.status(500).json({ msg: "Internal Server Error" });
   }
-
 }
-
-
 
 async function getInboxes(req, res) {
   const { senderEmail } = req.body;
@@ -264,10 +271,10 @@ async function getInboxes(req, res) {
 
     if (existInboxes.length > 0) {
       const keysToExtract = ["query", "description", "authorName"];
-      
-      const extractedData = existInboxes.map(inbox => {
+
+      const extractedData = existInboxes.map((inbox) => {
         const extracted = {};
-        keysToExtract.forEach(key => {
+        keysToExtract.forEach((key) => {
           if (inbox[key] !== undefined) {
             extracted[key] = inbox[key];
           }
@@ -285,11 +292,8 @@ async function getInboxes(req, res) {
   }
 }
 
-
-
-async function getPopularBlog(req,res){
-
-  console.log('try to fetch popular Blog')
+async function getPopularBlog(req, res) {
+  console.log("try to fetch popular Blog");
 
   try {
     const popularBlog = await VlogModel.find({});
@@ -317,10 +321,9 @@ async function getPopularBlog(req,res){
     console.error("Retrieve operation failed!", error);
     res.status(500).json({ msg: "Internal Server Error" });
   }
-
 }
 
-async function getAllquery(req,res){
+async function getAllquery(req, res) {
   try {
     const allQuery = await VlogModel.find({});
 
@@ -349,12 +352,12 @@ async function getAllquery(req,res){
   }
 }
 
-
-
-async function getSolvequery(req,res){
-  const {senderEmail}=req.body
+async function getSolvequery(req, res) {
+  const { senderEmail } = req.body;
   try {
-    const solveQuery = await VlogModel.find({ senderEmail: { $ne: senderEmail } });
+    const solveQuery = await VlogModel.find({
+      senderEmail: { $ne: senderEmail },
+    });
 
     if (solveQuery.length > 0) {
       const keysToExtract = ["query"];
@@ -381,29 +384,25 @@ async function getSolvequery(req,res){
   }
 }
 
-async function submitFeedback(req,res){
-{
-  const {  email, message } = req.body;
-  try {
-    console.log(
-      `Received data: Email - ${email},Message - ${message}`
-    );
-    const newFeedback = new FeedbackModel({
- 
-      email,
-      message,
-    });
-    await newFeedback.save();
-    createAndSendToken(newFeedback, 201, res);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: "Internal server error" });
+async function submitFeedback(req, res) {
+  {
+    const { email, message } = req.body;
+    try {
+      console.log(`Received data: Email - ${email},Message - ${message}`);
+      const newFeedback = new FeedbackModel({
+        email,
+        message,
+      });
+      await newFeedback.save();
+      createAndSendToken(newFeedback, 201, res);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ message: "Internal server error" });
+    }
   }
 }
-}
 
-async function submitISsues(req,res){
-
+async function submitISsues(req, res) {
   const { name, email, issue } = req.body;
   try {
     console.log(
@@ -420,12 +419,79 @@ async function submitISsues(req,res){
     console.error(error);
     res.status(500).send({ message: "Internal server error" });
   }
-
 }
 
+async function generateOtp(req, res) {
+  const email = req.body;
+  let newotp = "";
+  for (let i = 0; i <= 3; i++) {
+    newotp += Math.floor(Math.random() * 10).toString();
+  }
+  try {
+    const user = await UserModel.findOneAndUpdate(
+      email,
+      { $set: { otp: newotp } },
+      { new: true }
+    );
+    const mailOptions = {
+      from: "bikikutta25@gmail.com",
+      to: email.email,
+      subject: "OTP-Verification",
+      text: `Please use the code below to confirm your email address. This code will expire in 2 hours. If you don't think you should be receiving this email, you can safely ignore it. 
+      ${newotp}`,
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+    if (user) {
+      res.status(200).send({ message: "Otp Success" });
+    } else {
+      res.status(404).send({ message: "No existing admin found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "OTP generation failed" });
+  }
+}
 
+async function otpValidation(req, res) {
+  const { email, otp } = req.body;
+  console.log(email);
+  console.log(otp);
+  try {
+    const user = await UserModel.findOne({ email: email, otp: otp });
+    if (user) {
+      console.log("Validation Success");
+      res.status(202).json({ success: true });
+    } else {
+      console.log("Validation Failed");
+      res.status(401).json("Invalid OTP");
+    }
+  } catch (error) {
+    console.error(error);
+    res
+      .status(502)
+      .send({ message: "OTP validation failed, Internal server error" });
+  }
+}
 
-
+async function resetPassword(req, res) {
+  const { email, password } = req.body;
+  const user = await UserModel.findOneAndUpdate(
+    { email: email },
+    { $set: { password: password } },
+    { new: true }
+  );
+  if (user) {
+    res.status(201).send({ message: "Password reseted" });
+  } else {
+    res.status(502).send("password reset process failed");
+  }
+}
 
 module.exports = {
   newVlogCreate,
@@ -444,5 +510,8 @@ module.exports = {
   getAllquery,
   getSolvequery,
   submitFeedback,
-  submitISsues
+  submitISsues,
+  generateOtp,
+  otpValidation,
+  resetPassword,
 };

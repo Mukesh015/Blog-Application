@@ -48,7 +48,8 @@ const Solve = ({ params }) => {
     fetchEmail();
   }, [token]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const response = await fetch("http://localhost:8080/addcomment", {
         method: "POST",
@@ -71,9 +72,7 @@ const Solve = ({ params }) => {
         });
         throw new Error("Failed to fetch comments");
       } else {
-        const data = await response.json();
-        console.log(data);
-        setComments(data);
+        console.log('all ok')
         toast.success("post published",{
           position: "top-center",
           autoClose: 2000,
@@ -95,7 +94,7 @@ const Solve = ({ params }) => {
       <div className="ml-80 mt-28 mr-10">
         <h1 className="mb-10">{query}</h1>
         <div>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
               <div className="flex items-center justify-between px-3 py-2 border-b dark:border-gray-600">
                 <div className="flex flex-wrap items-center divide-gray-200 sm:divide-x sm:rtl:divide-x-reverse dark:divide-gray-600">
@@ -141,9 +140,8 @@ const Solve = ({ params }) => {
               </div>
             </div>
             <button
-              type="button"
+              type="submit"
               className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
-              onClick={() => handleSubmit()}
             >
               Publish post
             </button>
