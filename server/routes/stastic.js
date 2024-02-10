@@ -21,6 +21,9 @@ const {
   generateOtp,
   otpValidation,
   resetPassword,
+  countTotalQueries,
+  countTotalPosts,
+  countTotalComments
 } = require("../controllers/auth");
 const { createAndSendToken, verifyToken } = require("../middlewares/auth");
 const StaticRouter = express.Router();
@@ -45,5 +48,9 @@ StaticRouter.post("/submitissues", submitISsues);
 StaticRouter.post("/generateotp", generateOtp);
 StaticRouter.post("/otpvalidation", otpValidation);
 StaticRouter.post("/resetpassword", resetPassword);
+StaticRouter.post("/counttotalquery", countTotalQueries);
+StaticRouter.post("/counttotalposts", countTotalPosts);
+StaticRouter.post("/counttotalcomments",   countTotalComments);
+
 
 module.exports = StaticRouter;

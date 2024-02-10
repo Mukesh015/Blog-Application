@@ -1,15 +1,50 @@
 "use client"
 import 'react-toastify/dist/ReactToastify.css'
+import { useState, useEffect } from 'react';
+import getCookieValueByName from "../cookie.js";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import NextTopLoader from 'nextjs-toploader';
+import logo from "../../image/logo.png"
 
 
 
 export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
+
     const router = useRouter();
+    const [userName, setUserName] = useState("");
+
+    async function getUSerName() {
+        const token = await getCookieValueByName("cookie-1");
+        try {
+            const fetchedEmail = await fetch('http://localhost:8080/getuser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ token }),
+            });
+            const userData = await fetchedEmail.json();
+
+            if (userData && userData.username) {
+
+                const name = userData.username.username
+                setUserName(name);
+            }
+            else {
+                console.log("failed to fetch Email")
+            }
+        }
+        catch (error) {
+            console.log("failed to fetch Email")
+        }
+    }
+    useEffect(() => {
+        getUSerName();
+    }, []);
+
     const Logout = async () => {
         toast.success("Logging out ...", {
             position: "top-right",
@@ -26,6 +61,7 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
             router.push("/");
         }, 1500);
     }
+
     return (
         <>
             <NextTopLoader />
@@ -50,10 +86,9 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
                                 <div className="flex items-center ms-3">
                                     <div className='flex'>
                                         <button type="button" className="mr-3 flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                                            <span className="sr-only">Open user menu</span>
-                                            <img className="cursor-not-allowed w-8 h-8 rounded-full" src="https://static.vecteezy.com/system/resources/previews/013/042/571/original/default-avatar-profile-icon-social-media-user-photo-in-flat-style-vector.jpg" alt="user photo" />
+                                            <img className="cursor-not-allowed w-8 h-8 rounded-full" alt="Logo" />
                                         </button>
-                                        <span className='mt-1 text-yellow-500 font-bold font-sans cursor-not-allowed'>MUKESH GUPTA</span>
+                                        <span className='mt-1 text-yellow-500 font-bold font-sans cursor-not-allowed'>{userName}</span>
                                     </div>
                                     <div className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
                                         <div className="px-4 py-3" role="none">

@@ -1,11 +1,13 @@
 "use client"
 import { useState, useEffect } from "react";
 import cookie from 'js-cookie';
+import { useRouter } from "next/navigation";
 
 const Post = () => {
   const [senderEmail, setSenderEmail] = useState('');
   const [posts, setPosts] = useState([]);
   const token = cookie.get('cookie-1');
+  const router = useRouter();
 
   useEffect(() => {
     const fetchEmailPosts = async () => {
@@ -50,14 +52,18 @@ const Post = () => {
     fetchEmailPosts();
   }, [token,senderEmail]);
 
+  const handlePostLink = async (id) => {
+    router.push(`/blogs/${id}`);
+  };
+
   return (
     <>
       <div className="mt-20 ml-80 mr-20">
-          {posts && posts.length > 0 ? (
-          posts.map((paragraph, index) => (
-            <div key={index} className="mb-4 font-semibold cursor-pointer hover:text-blue-500 mt-10">
-              <p>{paragraph.query}</p>
-              <span className="border-b border-gray-400 block mt-2"></span> {/* Border after each post */}
+        {posts && posts.length > 0 ? (
+          posts.map((post, index) => (
+            <div key={index} className="mb-4 font-semibold cursor-pointer hover:text-blue-500 mt-10" onClick={() => handlePostLink(post.query)}>
+              <p>{post.query}</p>
+              <span className="border-b border-gray-400 block mt-2"></span> 
             </div>
           ))
         ) : (

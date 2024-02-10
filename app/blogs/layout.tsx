@@ -1,6 +1,6 @@
 "use client"
 import NextTopLoader from 'nextjs-toploader';
-
+import React, { useState } from 'react';
 
 export default function BlogsLayout({
   children,

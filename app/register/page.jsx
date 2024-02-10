@@ -3,14 +3,12 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-
 export default function Register() {
   const [username, setuserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const router = useRouter();
-
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -167,22 +165,14 @@ export default function Register() {
                 </svg>
               </div>
             </div>
-            <div className="flex items-center mt-8">
-              <input
-                required
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 shrink-0 rounded"
-              />
-              <label htmlFor="remember-me" className="ml-3 block text-sm">
-                I accept the{" "}
-                <a
-                  href="#"
-                  className="text-yellow-500 font-semibold hover:underline ml-1"
-                >
-                  Terms and Conditions
-                </a>
+            <div className="flex items-center space-x-6 mt-7">
+              <label className="block">
+                <span className="text-xs">Choose your profile photo</span>
+                <input
+                  type="file"
+                  // onChange={loadFile}
+                  className="mt-3 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+                />
               </label>
             </div>
             <div className="mt-12">

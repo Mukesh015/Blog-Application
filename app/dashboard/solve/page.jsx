@@ -24,37 +24,35 @@ const Solve = () => {
       if (userData && userData.username) {
         const email = await userData.username.email;
         setSenderEmail(email);
-      } else {
+        const response = await fetch("http://localhost:8080/getsolvequery", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ senderEmail:email }),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to query ");
+        }
+  
+        const data = await response.json();
+        setQuery(data);
+      }
+     else {
         throw new Error("Failed to fetch user data or username is undefined");
       }
-    } catch (error) {
-      ("failed to fetch email");
     }
-  };
-  const fetchSolvedQuery = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/getsolvequery", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ senderEmail }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to query ");
+         catch (error) {
+        console.log("failed to fetch Solve query", error);
       }
 
-      const data = await response.json();
-      setQuery(data);
-    } catch (error) {
-      console.log("failed to fetch Solve query", error);
-    }
   };
+
 
   useEffect(() => {
     fetchEmail();
-    fetchSolvedQuery();
+  
   }, [token,senderEmail]);
 
 

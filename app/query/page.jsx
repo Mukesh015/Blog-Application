@@ -1,77 +1,74 @@
 "use client";
-import React from "react";
-import { useEffect,useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-
-
 const Solve = () => {
-  const [query, setQuery] = useState([])
+  const [query, setQuery] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
-    async function fetchquery(){
-  try {
-    const response = await fetch('http://localhost:8080/getallquery', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      
-    });
+    async function fetchquery() {
+      try {
+        const response = await fetch("http://localhost:8080/getallquery", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-    if (!response.ok) {
-      throw new Error('Failed to query comments');
+        if (!response.ok) {
+          throw new Error("Failed to query comments");
+        }
+
+        const data = await response.json();
+        setQuery(data);
+      } catch (error) {
+        console.error("Failed to query comments", error);
+      }
     }
+    fetchquery();
+  }, []);
 
-    const data = await response.json();
-    setQuery(data);
-  } catch (error) {
-    console.error('Failed to query comments', error);
-  } 
-    }
-    fetchquery()
-  })
-
-
-  const handleSolve=async(id)=>{
+  const handleSolve = async (id) => {
     router.push(`/dashboard/solve/${id}`);
+  };
 
-  }
   return (
-    <>
-      <div className="mt-10 ml-20 mr-20">
-      {query.map((query, index) => (
-        <div className=" border-b border-gray-400 mt-3">
-        
-          <p key={index} className="mb-1 font-semibold">
-            {query.query}
+    <div className="flex flex-wrap justify-center mt-20">
+      {query.map((queryItem, index) => (
+        <div
+          key={index}
+          className="max-w-sm m-5 p-10  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+        >
+          <svg
+            className="w-7 h-7 text-gray-500 dark:text-gray-400 mb-3 mx-auto"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M18 5h-.7c.229-.467.349-.98.351-1.5a3.5 3.5 0 0 0-3.5-3.5c-1.717 0-3.215 1.2-4.331 2.481C8.4.842 6.949 0 5.5 0A3.5 3.5 0 0 0 2 3.5c.003.52.123 1.033.351 1.5H2a2 2 0 0 0-2 2v3a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V7a2 2 0 0 0-2-2ZM8.058 5H5.5a1.5 1.5 0 0 1 0-3c.9 0 2 .754 3.092 2.122-.219.337-.392.635-.534.878Zm6.1 0h-3.742c.933-1.368 2.371-3 3.739-3a1.5 1.5 0 0 1 0 3h.003ZM11 13H9v7h2v-7Zm-4 0H2v5a2 2 0 0 0 2 2h3v-7Zm6 0v7h3a2 2 0 0 0 2-2v-5h-5Z" />
+          </svg>
+          <a href="#">
+            <h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">
+              {queryItem.query}
+            </h5>
+          </a>
+          <p className="mb-3 font-normal text-gray-500 dark:text-gray-400 text-center">
+            No given description of the query. You can solve the problem or
+            throw the answer as you capable of solving power.
           </p>
-        
-          <div className="mb-3">
-            <button type='button' className="mt-2 inline-flex items-center gap-x-1 text-blue-600 decoration-2 hover:underline font-medium" 
-            onClick={() => handleSolve(query.query)}>
-              solve
-              <svg
-                className="flex-shrink-0 w-4 h-4"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="m9 18 6-6-6-6" />
-              </svg>
-            </button>
-          </div>
+          <a
+            onClick={() => handleSolve(queryItem.query)}
+            className="cursor-pointer inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Solve
+          </a>
         </div>
-        ))}
-      </div>
-    </>
+      ))}
+    </div>
   );
 };
+
 export default Solve;

@@ -494,6 +494,66 @@ async function resetPassword(req, res) {
   }
 }
 
+
+async function countTotalQueries(req,res){
+  const {senderEmail}=req.body
+  try{
+    const allQuery = await VlogModel.find({senderEmail:senderEmail});
+    const lengthAllQuery=allQuery.length
+    res.status(200).json(lengthAllQuery)
+
+  }
+  catch(error){
+    console.log('failed count number of Query',error)
+  }
+}
+
+
+async function countTotalPosts(req,res){
+
+  try{
+    const allPost = await VlogModel.find({});
+    const lengthAllPosts=allPost.length
+    res.status(200).json(lengthAllPosts)
+
+  }
+  catch(error){
+    console.log('failed count number of posts',error)
+  }
+}
+
+
+async function countTotalComments(req, res) {
+  const { authorEmail } = req.body;
+  let totalComments = 0;
+
+  try {
+    const result = await VlogModel.find({
+      authorEmail: { $exists: true, $ne: [] },
+      authorEmail: authorEmail,
+    });
+    
+    if (result.length > 0) {
+      const extractedData = result.map((resultItem) => {
+        const descriptions = [];
+        const query = [];
+
+        resultItem.authorEmail.forEach((email, index) => {
+          if (
+            email === authorEmail
+          )
+          totalComments=totalComments+1
+        })
+      })
+    }
+    res.status(200).json(totalComments);
+  } catch (error) {
+    // Handle error appropriately
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
 module.exports = {
   newVlogCreate,
   getBlog,
@@ -515,4 +575,7 @@ module.exports = {
   generateOtp,
   otpValidation,
   resetPassword,
+  countTotalQueries,
+  countTotalPosts,
+  countTotalComments
 };

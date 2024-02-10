@@ -5,22 +5,66 @@ import React from "react";
 import getCookieValueByName from "../../cookie.js";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { Query } from "mongoose";
 
 function PostQuery() {
   const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
+  const [senderEmail, setSenderEmail] = useState("");
   const [query, setQuery] = useState("");
   const router = useRouter();
 
+  async function validation() {
+    const token = await getCookieValueByName("cookie-1");
+    try {
+      const response = await fetch("http://localhost:8080/verifyJWT", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: token }),
+      });
+      if (response.status === 200) {
+        console.log("User loggedin");
+      } else {
+        console.log(
+          "You are not eligible to access this route ! Please login first"
+        );
+        router.push("/login");
+      }
+
+      const fetchedEmail = await fetch("http://localhost:8080/getuser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+      const userData = await fetchedEmail.json();
+
+      if (userData && userData.username) {
+        const email = userData.username.email;
+        setSenderEmail(email);
+      } else {
+        console.log("failed to fetch Email");
+      }
+    } catch (error) {
+      console.error("Server error autologin failed", error);
+    }
+  }
+  useEffect(() => {
+    validation();
+  }, []);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     try {
       const response = await fetch("http://localhost:8080/postnewquery", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, query }),
+        body: JSON.stringify({ senderEmail, query }),
       });
 
       if (!response.ok) {
@@ -28,7 +72,6 @@ function PostQuery() {
       }
 
       const data = await response.json();
-      console.log(data);
       toast.success("Query posted successfully", {
         position: "top-right",
         autoClose: 2000,
@@ -52,32 +95,6 @@ function PostQuery() {
       });
     }
   };
-
-  async function validation() {
-    const token = await getCookieValueByName("cookie-1");
-    try {
-      const response = await fetch("http://localhost:8080/verifyJWT", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: token }),
-      });
-      if (response.status === 200) {
-        console.log("User loggedin");
-      } else {
-        console.log(
-          "You are not eligible to access this route ! Please login first"
-        );
-        router.push("/login");
-      }
-    } catch (error) {
-      console.error("Server error autologin failed", error);
-    }
-  }
-  useEffect(() => {
-    validation();
-  }, []);
 
   return (
     <div className="ml-72 mt-52 mr-10">
@@ -149,6 +166,8 @@ function PostQuery() {
               rows="8"
               className="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
               placeholder="Write an article..."
+              value={Query}
+              onChange={(e) => setQuery(e.target.value.toLowerCase())}
               required
             ></textarea>
           </div>
@@ -156,8 +175,9 @@ function PostQuery() {
         <button
           type="submit"
           className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+          onClick={handleSubmit}
         >
-          Publish post
+          Post Query
         </button>
       </form>
     </div>
