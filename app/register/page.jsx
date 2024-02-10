@@ -1,12 +1,16 @@
 "use client";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 
 export default function Register() {
   const [username, setuserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(true);
+  const router = useRouter();
+
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -19,32 +23,34 @@ export default function Register() {
         body: JSON.stringify({ username, email, password }),
       });
       if (!response.ok) {
-        toast.error('User Registration failed',{
-          position:"top-center",
+        toast.error("User Registration failed", {
+          position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        })
+          theme: "dark",
+        });
         throw new Error("User registration failed");
-      }
-      else{
+      } else {
         const data = await response.json();
         document.cookie = `cookie-1 = ${data.token}`;
-        toast.success('User Registration success',{
-          position:"top-center",
+        toast.success("User Registration success", {
+          position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        })
+          theme: "dark",
+        });
       }
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
     } catch (error) {
       console.error("Server error", error);
     }
@@ -140,7 +146,7 @@ export default function Register() {
               <div className="relative flex items-center">
                 <input
                   name="password"
-                  type="password"
+                  type={showPassword ? "password" : "text"}
                   required
                   className="w-full bg-transparent text-sm border-b border-gray-300 focus:border-yellow-400 px-2 py-3 outline-none"
                   placeholder="Enter password"
@@ -152,6 +158,7 @@ export default function Register() {
                   stroke="#bbb"
                   className="w-[18px] h-[18px] absolute right-2 cursor-pointer"
                   viewBox="0 0 128 128"
+                  onClick={() => setShowPassword(!showPassword)}
                 >
                   <path
                     d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
@@ -162,6 +169,7 @@ export default function Register() {
             </div>
             <div className="flex items-center mt-8">
               <input
+                required
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"

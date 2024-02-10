@@ -4,8 +4,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import getCookieValueByName from "../../cookie.js";
 import { useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 function PostQuery() {
   const [fullName, setFullName] = useState("");
@@ -30,25 +29,26 @@ function PostQuery() {
 
       const data = await response.json();
       console.log(data);
-      toast.success("Query submitted successfully!", {
-        position: "top-center",
+      toast.success("Query posted successfully", {
+        position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
+        theme: "dark",
       });
     } catch (error) {
-      console.error("Failed to post query", error);
-      toast.error("Failed to submit query. Please try again later.", {
-        position: "top-center",
+      toast.error("Failed to submit query. Please try again", {
+        position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
+        theme: "dark",
       });
     }
   };

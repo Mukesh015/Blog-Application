@@ -64,7 +64,7 @@ const Inbox = () => {
                 {inbox.description.map((desc, descIndex) => (
                   <div key={descIndex} className="flex mb-2 text-gray-400">
                     <p>{desc}</p>
-                    <p className="text-right text-yellow-300 ml-10">
+                    <p className="text-right text-yellow-300 ml-4">
                       commented by- {inbox.authorName[descIndex]}
                     </p>
                   </div>

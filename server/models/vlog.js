@@ -5,7 +5,6 @@ const vlogSchema = new mongoose.Schema(
         query : {
             type:String,
             required : true,
-            unique:true
         },
         senderEmail:{
             type:String

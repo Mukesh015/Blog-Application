@@ -3,8 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import cookie from "js-cookie";
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css'
-
+import "react-toastify/dist/ReactToastify.css";
 
 const Solve = ({ params }) => {
   const query = decodeURIComponent(params.id);
@@ -60,21 +59,10 @@ const Solve = ({ params }) => {
       });
 
       if (!response.ok) {
-        toast.error("post published",{
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
         throw new Error("Failed to fetch comments");
       } else {
-        console.log('all ok')
-        toast.success("post published",{
-          position: "top-center",
+        toast.success("post published", {
+          position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -85,7 +73,17 @@ const Solve = ({ params }) => {
         });
       }
     } catch (error) {
-      console.error("Failed to add comment", error);
+      toast.error("Failed to publish post", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      console.error("Failed to publish post", error);
     }
   };
 
