@@ -4,11 +4,13 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
+import NextTopLoader from 'nextjs-toploader';
+
 
 
 export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
     const router = useRouter();
-    const Logout = async() => {
+    const Logout = async () => {
         toast.success("Logging out ...", {
             position: "top-right",
             autoClose: 2000,
@@ -26,7 +28,8 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
     }
     return (
         <>
-        <ToastContainer />
+            <NextTopLoader />
+            <ToastContainer />
             <div>
                 <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                     <div className="px-3 py-3 lg:px-5 lg:pl-3">

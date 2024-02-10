@@ -68,7 +68,7 @@ const Solve = () => {
         {query.map((query, index) => (
           <div key={index} className=" border-b border-gray-400 mt-3">
             <p
-              className="mb-1 font-semibold cursor-pointer  hover:text-blue-500 hover:underline"
+              className="mb-1 font-semibold"
             >
               {query.query}
             </p>

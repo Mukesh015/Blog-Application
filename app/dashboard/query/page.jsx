@@ -80,61 +80,84 @@ function PostQuery() {
   }, []);
 
   return (
-    <div className="my-20">
-      <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
-        <div className="mb-5">
-          <label
-            htmlFor="text"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Enter Your name
-          </label>
-          <input
-            type="text"
-            placeholder="Full name ..."
-            id="text"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            onChange={(e) => setFullName(e.target.value.toLowerCase())}
-            required
-          />
-        </div>
-        <div className="mb-5">
-          <label
-            htmlFor="email"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Enter your email
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="name@flowbite.com"
-            onChange={(e) => setEmail(e.target.value.toLowerCase())}
-            required
-          />
-        </div>
-        <div className="pb-10">
-          <label
-            htmlFor="message"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Enter your query
-          </label>
-
-          <textarea
-            id="message"
-            rows={6}
-            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Leave a comment..."
-            onChange={(e) => setQuery(e.target.value.toLowerCase())}
-          ></textarea>
+    <div className="ml-72 mt-52 mr-10">
+      <form>
+        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+          <div className="flex items-center justify-between px-3 py-2 border-b dark:border-gray-600">
+            <div className="flex flex-wrap items-center divide-gray-200 sm:divide-x sm:rtl:divide-x-reverse dark:divide-gray-600">
+              <div className="flex items-center space-x-1 rtl:space-x-reverse sm:pe-4">
+                <button
+                  type="button"
+                  className="p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    aria-hidden="true"
+                    fill="none"
+                    viewBox="0 0 12 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 6v8a5 5 0 1 0 10 0V4.5a3.5 3.5 0 1 0-7 0V13a2 2 0 0 0 4 0V6"
+                    />
+                  </svg>
+                  <span className="sr-only">Attach file</span>
+                </button>
+              </div>
+              <div className="flex flex-wrap items-center space-x-1 rtl:space-x-reverse sm:ps-4"></div>
+            </div>
+            <button
+              type="button"
+              data-tooltip-target="tooltip-fullscreen"
+              className="p-2 text-gray-500 rounded cursor-pointer sm:ms-auto hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+            >
+              <svg
+                className="w-4 h-4"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 19 19"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M13 1h5m0 0v5m0-5-5 5M1.979 6V1H7m0 16.042H1.979V12M18 12v5.042h-5M13 12l5 5M2 1l5 5m0 6-5 5m0 6-5 5"
+                />
+              </svg>
+              <span className="sr-only">Full screen</span>
+            </button>
+            <div
+              id="tooltip-fullscreen"
+              role="tooltip"
+              className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            >
+              Show full screen
+              <div className="tooltip-arrow" data-popper-arrow></div>
+            </div>
+          </div>
+          <div className="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
+            <label htmlFor="editor" className="sr-only">
+              Publish post
+            </label>
+            <textarea
+              id="editor"
+              rows="8"
+              className="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+              placeholder="Write an article..."
+              required
+            ></textarea>
+          </div>
         </div>
         <button
           type="submit"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
+          className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
         >
-          Submit
+          Publish post
         </button>
       </form>
     </div>

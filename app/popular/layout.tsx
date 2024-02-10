@@ -1,3 +1,4 @@
+import NextTopLoader from 'nextjs-toploader';
 
 export default function RootLayout({
   children,
@@ -111,6 +112,7 @@ export default function RootLayout({
         </nav>
       </header>
       <main>
+        <NextTopLoader />
         {children}
       </main>
     </>

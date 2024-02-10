@@ -1,4 +1,5 @@
 "use client"
+import NextTopLoader from 'nextjs-toploader';
 
 
 export default function BlogsLayout({
@@ -111,6 +112,7 @@ export default function BlogsLayout({
         </nav>
       </header>
       <main>
+        <NextTopLoader />
         {children}
       </main>
       <footer className="bg-white dark:bg-gray-900 mt-64">

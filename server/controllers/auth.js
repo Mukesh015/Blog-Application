@@ -27,7 +27,9 @@ async function newVlogCreate(req, res) {
 }
 
 async function postNewQuery(req, res) {
-  const { query, email } = req.body;
+  let { query, email } = req.body;
+  query = query.replace(/[(),{}@#$%&*?/"']/g, '').toLowerCase();
+  query = query.trim();
   try {
     const newPost = new VlogModel({
       query: query,
@@ -99,10 +101,12 @@ async function getAllBlog(req, res) {
 }
 
 async function addComment(req, res) {
-  const { query, description, authorName, authorEmail } = req.body;
-
+  let { query, description, authorName, authorEmail } = req.body;
+  query = query.replace(/[(){}@#$%&*?/"']/g, '').toLowerCase();
+  query = query.trim();
+  description = description.replace(/[(){}@#$%&*?/"']/g, '').toLowerCase();
   try {
-    await VlogModel.updateOne(
+    const result = await VlogModel.updateOne(
       { query: query },
       {
         $push: {
@@ -111,9 +115,6 @@ async function addComment(req, res) {
           authorEmail: authorEmail,
         },
       }
-    );
-    console.log(
-      `Received data. Query-${query} Description-${description} Added by-${authorName}`
     );
     res.status(200).send("Comment added successfully");
   } catch (error) {
