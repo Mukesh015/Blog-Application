@@ -48,11 +48,12 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
                             </div>
                             <div className="flex items-center">
                                 <div className="flex items-center ms-3">
-                                    <div>
-                                        <button type="button" className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                                    <div className='flex'>
+                                        <button type="button" className="mr-3 flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                             <span className="sr-only">Open user menu</span>
-                                            <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
+                                            <img className="cursor-not-allowed w-8 h-8 rounded-full" src="https://static.vecteezy.com/system/resources/previews/013/042/571/original/default-avatar-profile-icon-social-media-user-photo-in-flat-style-vector.jpg" alt="user photo" />
                                         </button>
+                                        <span className='mt-1 text-yellow-500 font-bold font-sans cursor-not-allowed'>MUKESH GUPTA</span>
                                     </div>
                                     <div className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
                                         <div className="px-4 py-3" role="none">

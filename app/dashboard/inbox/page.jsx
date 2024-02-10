@@ -59,10 +59,10 @@ const Inbox = () => {
         {inboxes && inboxes.length > 0 ? (
           inboxes.map((inbox, index) => (
             <div key={index} className="mb-5 border-b-2 border-white pb-6">
-              <p className="font-xl text-blue-500">{inbox.query}</p>
+              <p className="text-blue-500 font-bold text-xl">{inbox.query}</p>
               <div className="mt-4">
                 {inbox.description.map((desc, descIndex) => (
-                  <div key={descIndex} className="flex mb-2 text-gray-400">
+                  <div key={descIndex} className="mb-2 text-gray-400">
                     <p>{desc}</p>
                     <p className="text-right text-yellow-300 ml-4">
                       commented by- {inbox.authorName[descIndex]}

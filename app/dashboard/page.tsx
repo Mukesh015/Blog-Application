@@ -170,7 +170,7 @@ const Dashboard = () => {
                     d="M1 5h12m0 0L9 1m4 4L9 9"
                   />
                 </svg>
-                <span>Make a Query</span>
+                <span>Not Designed</span>
               </a>
             </div>
             <div className="flex flex-col items-center justify-center rounded bg-gray-50 h-52 dark:bg-gray-800 p-6">

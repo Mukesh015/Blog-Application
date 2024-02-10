@@ -44,7 +44,7 @@ const Solve = () => {
       {query.map((query, index) => (
         <div className=" border-b border-gray-400 mt-3">
         
-          <p key={index} className="mb-1 font-semibold cursor-pointer  hover:text-blue-500 hover:underline">
+          <p key={index} className="mb-1 font-semibold">
             {query.query}
           </p>
         
