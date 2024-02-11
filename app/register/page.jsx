@@ -6,19 +6,25 @@ import { useRouter } from "next/navigation";
 export default function Register() {
   const [username, setuserName] = useState("");
   const [email, setEmail] = useState("");
+  const [avatar, setAvatar] = useState(null);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const router = useRouter();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append('avatar', avatar);
+    formData.append('username', username);
+    formData.append('email', email);
+    formData.append('password', password);
+
     try {
       const response = await fetch("http://localhost:8080/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, email, password }),
+
+        body: formData,
+      
       });
       if (!response.ok) {
         toast.error("User Registration failed", {
@@ -169,8 +175,7 @@ export default function Register() {
               <label className="block">
                 <span className="text-xs">Choose your profile photo</span>
                 <input
-                  type="file"
-                  // onChange={loadFile}
+                   type="file"  onChange={(e)=>setAvatar(e.target.files[0])}
                   className="mt-3 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
                 />
               </label>

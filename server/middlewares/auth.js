@@ -8,11 +8,12 @@ const jwt = require("jsonwebtoken");
 const secretKey = process.env.JWT_SECRET;
 const expire = process.env.JWT_EXPIRES_IN;
 
-const signToken = (username, email) => {
+const signToken = (username, email,avatar) => {
   return jwt.sign(
     {
       username: username,
       email: email,
+      avatar : avatar,
       expiresIn: expire,
     },
     secretKey
@@ -23,6 +24,7 @@ const createAndSendToken = (user, statusCode, res) => {
   const token = signToken({
     username: user.username,
     email: user.email,
+    avatar : user.avatar
   });
   if (user.password) user.password = undefined;
   const cookieOptions = {

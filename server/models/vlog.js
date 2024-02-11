@@ -7,7 +7,8 @@ const vlogSchema = new mongoose.Schema(
             required : true,
         },
         senderEmail:{
-            type:String
+            type:String,
+            required : true,
         },
         description : {
             type:Array,
@@ -38,6 +39,9 @@ const UserSchema = new mongoose.Schema(
         password : {
             type:String,
             required : true
+        },
+        avatar:{
+            type:String,
         },
         otp:{
             required : false,

@@ -7,8 +7,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import NextTopLoader from 'nextjs-toploader';
-import logo from "../../image/logo.png"
-
+import Image from 'next/image'
 
 
 export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
@@ -86,9 +85,9 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
                                 <div className="flex items-center ms-3">
                                     <div className='flex'>
                                         <button type="button" className="mr-3 flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                                            <img className="cursor-not-allowed w-8 h-8 rounded-full" alt="Logo" />
+                                            <Image src="/logo.png" height={20} width={20} alt='profile pic' />
                                         </button>
-                                        <span className='mt-1 text-yellow-500 font-bold font-sans cursor-not-allowed'>{userName}</span>
+                                        <span className='mt-1 text-yellow-500 font-bold font-sans cursor-not-allowed mr-5'>{userName}</span>
                                     </div>
                                     <div className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
                                         <div className="px-4 py-3" role="none">

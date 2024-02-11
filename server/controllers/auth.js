@@ -9,7 +9,16 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config({ path: "../.env" });
 
+
+const cloudinary = require('cloudinary').v2;
 const secretKey = process.env.JWT_SECRET;
+
+cloudinary.config({ 
+  cloud_name: process.env.CLOUD_NAME, 
+  api_key: process.env.API_KEY, 
+  api_secret: process.env.API_SECRET
+});
+
 
 async function newVlogCreate(req, res) {
   const { title, description } = req.body;
@@ -27,13 +36,13 @@ async function newVlogCreate(req, res) {
 }
 
 async function postNewQuery(req, res) {
-  let { query, email } = req.body;
+  let { query, senderEmail } = req.body;
   query = query.replace(/[(),{}@#$%&*?/"']/g, '').toLowerCase();
   query = query.trim();
   try {
     const newPost = new VlogModel({
       query: query,
-      senderEmail: email,
+      senderEmail: senderEmail,
     });
     await newPost.save();
     res.status(201).json("New query sucessfully post");
@@ -124,23 +133,44 @@ async function addComment(req, res) {
 }
 
 async function register(req, res) {
+  require('events').EventEmitter.defaultMaxListeners = 15;
   const { username, email, password } = req.body;
+
   try {
     console.log(
-      `Received data: Name - ${username},Email - ${email},Password - ${password}`
+      `Received data: Name - ${username}, Email - ${email}, Password - ${password}`
     );
-    const newUser = new UserModel({
-      username,
-      email,
-      password,
-    });
-    await newUser.save();
-    createAndSendToken(newUser, 201, res);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: "Internal server error" });
+
+
+
+    cloudinary.uploader.upload(req.file.path, async function (err, result) {
+      if (err) {
+          console.error("Cloudinary upload failed:", err);
+          return res.status(500).json({ message: "Cloudinary upload failed", error: err });
+      }
+  
+      console.log('Cloudinary upload result:');
+  
+      const avatar = result.url;
+  
+      const newUser = new UserModel({
+          username,
+          email,
+          password,
+          avatar,
+      });
+  
+      await newUser.save();
+      createAndSendToken(newUser, 201, res);
+    })
   }
-}
+    catch(error){
+      console.log("failed to save",error)
+    }
+  }
+
+  
+
 
 async function login(req, res) {
   const { email, password } = req.body;
@@ -180,7 +210,8 @@ async function decodeJWT(req, res) {
     const decoded = jwt.verify(token, secretKey);
     const email = decoded.email;
     const username = decoded.username;
-    res.status(201).json({ email: email, username: username });
+    const profileURL = decoded.avatar;
+    res.status(201).json({ email: email, username: username, profileURL: profileURL});
   } catch (error) {
     res.status(401).json({ error: "Invalid token" });
   }
@@ -548,7 +579,6 @@ async function countTotalComments(req, res) {
     }
     res.status(200).json(totalComments);
   } catch (error) {
-    // Handle error appropriately
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }

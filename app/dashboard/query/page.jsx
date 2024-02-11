@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import { Query } from "mongoose";
 
 function PostQuery() {
-  const [fullName, setFullName] = useState("");
   const [senderEmail, setSenderEmail] = useState("");
   const [query, setQuery] = useState("");
   const router = useRouter();
@@ -99,7 +98,19 @@ function PostQuery() {
   return (
     <div className="ml-72 mt-52 mr-10">
       <form>
-        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+        <div className="px-4 py-2 bg-white rounded dark:bg-gray-800">
+          <label htmlFor="comment" className="sr-only">
+            Your comment
+          </label>
+          <input
+            id="comment"
+            rows="4"
+            className="w-full  px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+            placeholder="Add your heading here..."
+            required
+          ></input>
+        </div>
+        <div className="w-full mt-10 mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
           <div className="flex items-center justify-between px-3 py-2 border-b dark:border-gray-600">
             <div className="flex flex-wrap items-center divide-gray-200 sm:divide-x sm:rtl:divide-x-reverse dark:divide-gray-600">
               <div className="flex items-center space-x-1 rtl:space-x-reverse sm:pe-4">
@@ -165,7 +176,7 @@ function PostQuery() {
               id="editor"
               rows="8"
               className="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-              placeholder="Write an article..."
+              placeholder="Describe your query here..."
               value={Query}
               onChange={(e) => setQuery(e.target.value.toLowerCase())}
               required

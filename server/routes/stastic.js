@@ -1,4 +1,9 @@
 const express = require("express");
+const multer = require('multer');
+
+
+
+
 const {
   newVlogCreate,
   getBlog,
@@ -27,13 +32,16 @@ const {
 } = require("../controllers/auth");
 const { createAndSendToken, verifyToken } = require("../middlewares/auth");
 const StaticRouter = express.Router();
+const storage = multer.diskStorage({});
+const upload = multer({ storage });
+
 
 StaticRouter.post("/createblog", newVlogCreate);
 StaticRouter.post("/getblog", getBlog);
 StaticRouter.post("/postnewquery", postNewQuery);
 StaticRouter.post("/getallblog", getAllBlog);
 StaticRouter.post("/addcomment", addComment);
-StaticRouter.post("/register", register);
+StaticRouter.post("/register",upload.single('avatar'), register);
 StaticRouter.post("/login", login);
 StaticRouter.post("/verifyjwt", verifyToken, welcome);
 StaticRouter.post("/getuser", decodeJWT);
@@ -51,6 +59,9 @@ StaticRouter.post("/resetpassword", resetPassword);
 StaticRouter.post("/counttotalquery", countTotalQueries);
 StaticRouter.post("/counttotalposts", countTotalPosts);
 StaticRouter.post("/counttotalcomments",   countTotalComments);
+
+
+
 
 
 module.exports = StaticRouter;

@@ -7,6 +7,8 @@ const bodyParser = require('body-parser')
 const dotenv = require("dotenv");
 dotenv.config({ path: "./.env" });
 
+
+
 const DB = process.env.db;
 const PORT = process.env.PORT;
 
@@ -15,7 +17,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use("/files", express.static("files"));
 app.use(cookieParser());
+
 
 mongoose.connect(DB)
     .then(console.log('Database connected'))
