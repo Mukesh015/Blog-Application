@@ -7,13 +7,15 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import NextTopLoader from 'nextjs-toploader';
-import Image from 'next/image'
+
 
 
 export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
 
     const router = useRouter();
     const [userName, setUserName] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
+
 
     async function getUSerName() {
         const token = await getCookieValueByName("cookie-1");
@@ -29,7 +31,10 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
 
             if (userData && userData.username) {
 
-                const name = userData.username.username
+                let name = userData.username.username
+                name = name.toUpperCase();
+                const url = userData.username.avatar
+                setImageUrl(url)
                 setUserName(name);
             }
             else {
@@ -85,7 +90,7 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
                                 <div className="flex items-center ms-3">
                                     <div className='flex'>
                                         <button type="button" className="mr-3 flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                                            <Image src="/logo.png" height={20} width={20} alt='profile pic' />
+                                            <img className='rounded-xl' src={imageUrl} height={20} width={30} alt="profile pic" />
                                         </button>
                                         <span className='mt-1 text-yellow-500 font-bold font-sans cursor-not-allowed mr-5'>{userName}</span>
                                     </div>

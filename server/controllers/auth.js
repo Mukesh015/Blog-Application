@@ -4,21 +4,24 @@ const {
   FeedbackModel,
   ContactModel,
 } = require("../models/vlog");
-const { createAndSendToken, transporter } = require("../middlewares/auth");
+const {
+  createAndSendToken,
+  transporter,
+  isPasswordComplex,
+} = require("../middlewares/auth");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 dotenv.config({ path: "../.env" });
 
-
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require("cloudinary").v2;
 const secretKey = process.env.JWT_SECRET;
 
-cloudinary.config({ 
-  cloud_name: process.env.CLOUD_NAME, 
-  api_key: process.env.API_KEY, 
-  api_secret: process.env.API_SECRET
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
 });
-
 
 async function newVlogCreate(req, res) {
   const { title, description } = req.body;
@@ -37,7 +40,7 @@ async function newVlogCreate(req, res) {
 
 async function postNewQuery(req, res) {
   let { query, senderEmail } = req.body;
-  query = query.replace(/[(),{}@#$%&*?/"']/g, '').toLowerCase();
+  query = query.replace(/[(),{}@#$%&*?/"']/g, "").toLowerCase();
   query = query.trim();
   try {
     const newPost = new VlogModel({
@@ -111,9 +114,9 @@ async function getAllBlog(req, res) {
 
 async function addComment(req, res) {
   let { query, description, authorName, authorEmail } = req.body;
-  query = query.replace(/[(){}@#$%&*?/"']/g, '').toLowerCase();
+  query = query.replace(/[(){}@#$%&*?/"']/g, "").toLowerCase();
   query = query.trim();
-  description = description.replace(/[(){}@#$%&*?/"']/g, '').toLowerCase();
+  description = description.replace(/[(){}@#$%&*?/"']/g, "").toLowerCase();
   try {
     const result = await VlogModel.updateOne(
       { query: query },
@@ -133,43 +136,40 @@ async function addComment(req, res) {
 }
 
 async function register(req, res) {
-  require('events').EventEmitter.defaultMaxListeners = 15;
+  require("events").EventEmitter.defaultMaxListeners = 15;
   const { username, email, password } = req.body;
-
   try {
-    console.log(
-      `Received data: Name - ${username}, Email - ${email}, Password - ${password}`
-    );
-
-
-
+    if (!isPasswordComplex(password)) {
+      return res.status(400).json({
+        error:
+          "Password must contain at least one uppercase letter, one numeric digit, and one special character",
+      });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
     cloudinary.uploader.upload(req.file.path, async function (err, result) {
       if (err) {
-          console.error("Cloudinary upload failed:", err);
-          return res.status(500).json({ message: "Cloudinary upload failed", error: err });
+        console.error("Cloudinary upload failed:", err);
+        return res
+          .status(500)
+          .json({ message: "Cloudinary upload failed", error: err });
       }
-  
-      console.log('Cloudinary upload result:');
-  
       const avatar = result.url;
-  
       const newUser = new UserModel({
-          username,
-          email,
-          password,
-          avatar,
+        username,
+        email,
+        password: hashedPassword,
+        avatar,
       });
-  
       await newUser.save();
       createAndSendToken(newUser, 201, res);
-    })
+    });
+  } catch (error) {
+    console.log("Failed to save:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to save user", error: error });
   }
-    catch(error){
-      console.log("failed to save",error)
-    }
-  }
-
-  
+}
 
 
 async function login(req, res) {
@@ -179,17 +179,19 @@ async function login(req, res) {
     if (!user) {
       return res.status(401).json({ error: "User not found" });
     }
-    if (user.password === password) {
-      const username = user.username;
-      const newUser = new UserModel({
-        username,
-        email,
-        password,
-      });
-      createAndSendToken(newUser, 202, res);
-    } else {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
+    const username = user.username;
+    const avatar = user.avatar;
+    const newUser = new UserModel({
+      username,
+      email,
+      password: user.password,
+      avatar
+    });
+    createAndSendToken(newUser, 202, res);
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Internal server error" });
@@ -211,7 +213,9 @@ async function decodeJWT(req, res) {
     const email = decoded.email;
     const username = decoded.username;
     const profileURL = decoded.avatar;
-    res.status(201).json({ email: email, username: username, profileURL: profileURL});
+    res
+      .status(201)
+      .json({ email: email, username: username, profileURL: profileURL });
   } catch (error) {
     res.status(401).json({ error: "Invalid token" });
   }
@@ -525,34 +529,26 @@ async function resetPassword(req, res) {
   }
 }
 
-
-async function countTotalQueries(req,res){
-  const {senderEmail}=req.body
-  try{
-    const allQuery = await VlogModel.find({senderEmail:senderEmail});
-    const lengthAllQuery=allQuery.length
-    res.status(200).json(lengthAllQuery)
-
-  }
-  catch(error){
-    console.log('failed count number of Query',error)
+async function countTotalQueries(req, res) {
+  const { senderEmail } = req.body;
+  try {
+    const allQuery = await VlogModel.find({ senderEmail: senderEmail });
+    const lengthAllQuery = allQuery.length;
+    res.status(200).json(lengthAllQuery);
+  } catch (error) {
+    console.log("failed count number of Query", error);
   }
 }
 
-
-async function countTotalPosts(req,res){
-
-  try{
+async function countTotalPosts(req, res) {
+  try {
     const allPost = await VlogModel.find({});
-    const lengthAllPosts=allPost.length
-    res.status(200).json(lengthAllPosts)
-
-  }
-  catch(error){
-    console.log('failed count number of posts',error)
+    const lengthAllPosts = allPost.length;
+    res.status(200).json(lengthAllPosts);
+  } catch (error) {
+    console.log("failed count number of posts", error);
   }
 }
-
 
 async function countTotalComments(req, res) {
   const { authorEmail } = req.body;
@@ -563,19 +559,16 @@ async function countTotalComments(req, res) {
       authorEmail: { $exists: true, $ne: [] },
       authorEmail: authorEmail,
     });
-    
+
     if (result.length > 0) {
       const extractedData = result.map((resultItem) => {
         const descriptions = [];
         const query = [];
 
         resultItem.authorEmail.forEach((email, index) => {
-          if (
-            email === authorEmail
-          )
-          totalComments=totalComments+1
-        })
-      })
+          if (email === authorEmail) totalComments = totalComments + 1;
+        });
+      });
     }
     res.status(200).json(totalComments);
   } catch (error) {
@@ -607,5 +600,5 @@ module.exports = {
   resetPassword,
   countTotalQueries,
   countTotalPosts,
-  countTotalComments
+  countTotalComments,
 };

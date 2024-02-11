@@ -26,7 +26,23 @@ export default function Register() {
         body: formData,
       
       });
-      if (!response.ok) {
+      const data = await response.json();
+      if (response.statusCode === 400) {
+        console.log(data)
+        toast.error("Choose a strong password", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        throw new Error("User registration failed, Password encryption failed");
+      }
+      else if(!response.ok){
+        console.log(data)
         toast.error("User Registration failed", {
           position: "top-center",
           autoClose: 2000,
@@ -38,8 +54,8 @@ export default function Register() {
           theme: "dark",
         });
         throw new Error("User registration failed");
-      } else {
-        const data = await response.json();
+      }
+      else if(data.status === "success"){
         document.cookie = `cookie-1 = ${data.token}`;
         toast.success("User Registration success", {
           position: "top-center",
