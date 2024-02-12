@@ -88,8 +88,6 @@ export default function Login() {
         const data = await response.json();
 
         if (response.status === 202) {
-          router.push("/dashboard");
-          document.cookie = `cookie-1 = ${data.token}`;
           toast.success("Login success...", {
             position: "top-center",
             autoClose: 2000,
@@ -100,6 +98,8 @@ export default function Login() {
             progress: undefined,
             theme: "dark",
           });
+          document.cookie = `cookie-1 = ${data.token}`;
+          router.push("/dashboard");
         }
       }
     } catch (error) {

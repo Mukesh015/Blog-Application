@@ -45,7 +45,7 @@ export default function Popular() {
       {popularBlog.map((item, index) => (
         <div className="border-b border-gray-400 mt-3" key={index}>
           <div>
-            <p className="mb-4 font-semibold cursor-pointer hover:text-blue-500 hover:underline">
+            <p className="mb-4 font-semibold cursor-default text-yellow-500 hover:text-lime-700">
               {item.query}
             </p>
             {item.description.length > 0 ? (

@@ -86,15 +86,15 @@ const Comment = () => {
         {comments.length > 0 ? (
           comments.map((item, index) => (
             <li key={index}>
-              <h2 className="pb-10 pl-6 cursor-pointer text-yellow-400 hover:text-blue-500">
+              <span className=" absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900"></span>
+              <h2 className="pb-7 pl-6  cursor-pointer text-yellow-400 hover:text-blue-500">
                 {item.query[0].query}
               </h2>
               <ul>
                 {item.descriptions.map((description, idx) => (
-                  <li className="mb-10 ms-6" key={idx}>
-                    <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900"></span>
+                  <li className="mb-8 ms-6" key={idx}>
                     <div className="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
-                      <time className="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
+                      <time className="mb-1 text-xs font-normal text-lime-500 sm:order-last sm:mb-0">
                         {description.timestamp}
                       </time>
                       <div className="text-sm font-normal text-gray-500 dark:text-gray-300">

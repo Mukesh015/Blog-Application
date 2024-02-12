@@ -99,7 +99,7 @@ export default function Blogs({ params }) {
   console.log(authorName, authorEmail);
 
   if (serviceError) {
-    return <Error503 />;
+    return <Error404 />;
   } else if (notFoundError) {
     return <Error404 />;
   }
