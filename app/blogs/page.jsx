@@ -54,7 +54,7 @@ export default function Blogs() {
               <div className="flex-shrink-0 relative rounded-xl overflow-hidden w-full sm:w-56 h-44">
                 <img
                   className="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full h-full absolute top-0 start-0 object-cover rounded-xl"
-                  src="https://cdn.pixabay.com/photo/2017/05/30/03/58/blog-2355684_1280.jpg"
+                  src={entry.queryPic ? entry.queryPic : "https://cdn.pixabay.com/photo/2017/05/30/03/58/blog-2355684_1280.jpg"} 
                   alt="Image Description"
                 />
               </div>

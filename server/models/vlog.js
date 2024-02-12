@@ -6,6 +6,12 @@ const vlogSchema = new mongoose.Schema(
             type:String,
             required : true,
         },
+        queryDescription:{
+            type:String,
+        },
+        queryPic:{
+            type:String,
+        },
         senderEmail:{
             type:String,
             required : true,
