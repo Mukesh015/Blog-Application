@@ -1,22 +1,19 @@
 const dotenv = require("dotenv");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 dotenv.config({ path: "../.env" });
 const jwt = require("jsonwebtoken");
-
-
 
 const secretKey = process.env.JWT_SECRET;
 const expire = process.env.JWT_EXPIRES_IN;
 
-const signToken = (username, email,avatar) => {
+const signToken = (username, email, avatar) => {
   return jwt.sign(
     {
       username: username,
       email: email,
-      avatar : avatar,
-      expiresIn: expire,
+      avatar: avatar,
     },
-    secretKey
+    secretKey,
   );
 };
 
@@ -24,7 +21,7 @@ const createAndSendToken = (user, statusCode, res) => {
   const token = signToken({
     username: user.username,
     email: user.email,
-    avatar : user.avatar
+    avatar: user.avatar,
   });
   if (user.password) user.password = undefined;
   const cookieOptions = {
@@ -38,7 +35,6 @@ const createAndSendToken = (user, statusCode, res) => {
     token: token,
   });
 };
-
 
 async function verifyToken(req, res, next) {
   const token = req.body.token;
@@ -59,15 +55,14 @@ async function verifyToken(req, res, next) {
 }
 
 const transporter = nodemailer.createTransport({
-  service:'gmail',
-  host: 'smtp.ethereal.email',
+  service: "gmail",
+  host: "smtp.ethereal.email",
   port: 587,
   auth: {
-      user: process.env.sendotpusername,
-      pass: process.env.sendotppassword
-  }
+    user: process.env.sendotpusername,
+    pass: process.env.sendotppassword,
+  },
 });
-
 
 function isPasswordComplex(password) {
   // Regular expressions to match uppercase letter, numeric digit, and special character
@@ -76,7 +71,16 @@ function isPasswordComplex(password) {
   const specialCharRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/;
 
   // Check if password meets all complexity requirements
-  return uppercaseRegex.test(password) && numericRegex.test(password) && specialCharRegex.test(password);
+  return (
+    uppercaseRegex.test(password) &&
+    numericRegex.test(password) &&
+    specialCharRegex.test(password)
+  );
 }
 
-module.exports = {createAndSendToken, verifyToken, transporter,isPasswordComplex };
+module.exports = {
+  createAndSendToken,
+  verifyToken,
+  transporter,
+  isPasswordComplex,
+};

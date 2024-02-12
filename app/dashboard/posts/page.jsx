@@ -1,13 +1,15 @@
 "use client";
-
+import { toast } from "react-toastify";
 import { useState, useEffect, useRef } from "react";
 import cookie from "js-cookie";
 import { useRouter } from "next/navigation";
+import "react-toastify/dist/ReactToastify.css";
 
 const Post = () => {
   const [senderEmail, setSenderEmail] = useState("");
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const token = cookie.get("cookie-1");
   const router = useRouter();
 
@@ -58,107 +60,138 @@ const Post = () => {
     router.push(`/blogs/${id}`);
   };
 
-
-  const PostItem = ({ post }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const dropdownRef = useRef(null);
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const handleDeleteButtonClick = async (query) => {
+    setSelectedPost(query);
+    setShowDeleteModal(true);
   };
 
-  const handleDeleteButtonClick = async(query) => {
-    setSelectedPost(query);
+  const handleConfirmDelete = async () => {
     try {
       const response = await fetch("http://localhost:8080/deletequery", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({ query: selectedPost }),
       });
-      if(!response.ok){
+      if (!response.ok) {
         throw new Error("Failed to delete query");
+      } else {
+        toast.success("post deleted successfully", {
+          position: "top-right",
+          autoClose: 900,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        setTimeout(()=>{
+          window.location.reload();
+        },1000)
       }
-      else{
-        console.log("your posts is been deleted")
-        window.location.reload()
-      }
-    }
-    catch(error){
-      console.log("your posts is been deleted",error)
+    } catch (error) {
+      console.log("Delete opration failed, server", error);
     }
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-      }
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedPost(null);
+  };
+
+  const PostItem = ({ post }) => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const dropdownRef = useRef(null);
+
+    const toggleDropdown = () => {
+      setIsDropdownOpen(!isDropdownOpen);
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (
+          dropdownRef.current &&
+          !dropdownRef.current.contains(event.target)
+        ) {
+          setIsDropdownOpen(false);
+        }
+      };
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      document.addEventListener("mousedown", handleClickOutside);
+
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
+
+    return (
+      <div className="mb-4 mt-10">
+        <div className="flex justify-between items-center">
+          <p
+            className="font-semibold cursor-pointer hover:text-blue-500"
+            onClick={() => handlePostLink(post.query)}
+          >
+            {post.query}
+          </p>
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={toggleDropdown}
+              className="inline-flex p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              type="button"
+            >
+              <svg
+                className="w-5 h-5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 4 15"
+              >
+                <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
+              </svg>
+            </button>
+            {isDropdownOpen && (
+              <div
+                className="absolute z-10 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 mt-2"
+                style={{ maxWidth: "10rem" }}
+              >
+                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:bg-green-500 block px-4 py-2 dark:hover:text-white"
+                    >
+                      Edit
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      onClick={() => handleDeleteButtonClick(post.query)}
+                      className="block px-4 py-2 hover:bg-red-500 dark:hover:text-white"
+                    >
+                      Delete
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+        <span className="border-b border-gray-400 block mt-2"></span>
+      </div>
+    );
+  };
 
   return (
-    <div className="mb-4 mt-10">
-      <div className="flex justify-between items-center">
-        <p
-          className="font-semibold cursor-pointer hover:text-blue-500"
-          onClick={() => handlePostLink(post.query)}
-        >
-          {post.query}
-        </p>
-        <div className="relative" ref={dropdownRef}>
-          <button
-            onClick={toggleDropdown}
-            className="inline-flex p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-            type="button"
-          >
-            <svg
-              className="w-5 h-5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 4 15"
-            >
-              <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-            </svg>
-          </button>
-          {isDropdownOpen && (
-            <div
-              className="absolute z-10 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 mt-2"
-              style={{ maxWidth: "10rem" }}
-            >
-              <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                <li>
-                  <a
-                    href="#"
-                    className="hover:bg-green-500 block px-4 py-2 dark:hover:text-white"
-                  >
-                    Edit
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-red-500 dark:hover:text-white"
-                    onClick={() => handleDeleteButtonClick(post.query)} // Call the function to show the delete modal
-                  >
-                    Delete
-                  </a>
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
-      <span className="border-b border-gray-400 block mt-2"></span>
+    <div className="mt-20 ml-80 mr-20">
+      {posts && posts.length > 0 ? (
+        posts.map((post, index) => <PostItem key={index} post={post} />)
+      ) : (
+        <p>No Available posts from this account</p>
+      )}
 
       {/* Delete modal */}
       {showDeleteModal && (
@@ -172,9 +205,8 @@ const Post = () => {
           <div className="absolute inset-0 overflow-hidden">
             <div className="flex justify-center items-center min-h-screen">
               <div className="relative w-full max-w-md p-4 bg-white rounded-lg shadow-xl sm:p-6">
-                {/* Delete modal content */}
                 <button
-                  onClick={() => setShowDeleteModal(false)} // Call the function to close the delete modal
+                  onClick={handleCloseDeleteModal}
                   type="button"
                   className="absolute top-0 right-0 p-2 m-2 text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900"
                 >
@@ -193,7 +225,6 @@ const Post = () => {
                   </svg>
                 </button>
                 <div className="text-center">
-                  {/* Delete modal content */}
                   <svg
                     className="text-gray-400 w-12 h-12 mx-auto"
                     aria-hidden="true"
@@ -212,19 +243,20 @@ const Post = () => {
                   </h3>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Do you really want to delete this item? This action
-                      cannot be undone.
+                      Do you really want to delete this item? This action cannot
+                      be undone.
                     </p>
                   </div>
                   <div className="mt-4">
                     <button
+                      onClick={handleConfirmDelete}
                       type="button"
                       className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                     >
                       Yes, delete
                     </button>
                     <button
-                      onClick={() => setShowDeleteModal(false)} // Call the function to close the delete modal
+                      onClick={handleCloseDeleteModal}
                       type="button"
                       className="inline-flex justify-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
@@ -236,18 +268,6 @@ const Post = () => {
             </div>
           </div>
         </div>
-      )}
-    </div>
-  );
-};
-
-
-  return (
-    <div className="mt-20 ml-80 mr-20">
-      {posts && posts.length > 0 ? (
-        posts.map((post, index) => <PostItem key={index} post={post} />)
-      ) : (
-        <p>No Available posts from this account</p>
       )}
     </div>
   );
