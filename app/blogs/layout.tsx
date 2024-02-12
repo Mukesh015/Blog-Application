@@ -4,7 +4,24 @@ import React, { useState } from 'react';
 
 export default function BlogsLayout({
   children,
-}: Readonly<{ children: React.ReactNode; }>) {
+}
+
+: Readonly<{ children: React.ReactNode; }>) {
+  const [searchQuery, setSearchQuery] = useState('');
+  async function handleSearch() {
+    var regex = new RegExp(searchQuery, 'gi');
+    var matches = document.body.innerText.match(regex);
+    if (matches) {
+      var html = document.body.innerHTML;
+      matches.forEach(match => {
+        html = html.replace(new RegExp(match, 'g'), `<mark>${match}</mark>`);
+    });
+    document.body.innerHTML = html;
+    } else {
+      alert('No matches found for "' + searchQuery + '".');
+    }
+  }
+
   return (
     <>
       <header>
@@ -20,6 +37,7 @@ export default function BlogsLayout({
                 data-collapse-toggle="navbar-search"
                 aria-controls="navbar-search"
                 aria-expanded="false"
+               
                 className="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 me-1"
               >
                 <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -40,10 +58,12 @@ export default function BlogsLayout({
                   id="search-navbar"
                   className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Search..."
+                  onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
                 />
               </div>
               <button
                 type="submit"
+                onClick={handleSearch}
                 className="inline-flex items-center py-2.5 px-3 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <svg
