@@ -10,6 +10,7 @@ import { Query } from "mongoose";
 function PostQuery() {
   const [senderEmail, setSenderEmail] = useState("");
   const [query, setQuery] = useState("");
+  const [files, setFiles] = useState(null);
   const router = useRouter();
 
   async function validation() {
@@ -96,12 +97,13 @@ function PostQuery() {
   };
 
   return (
-    <div className="ml-72 mt-52 mr-10">
+    <div className="ml-72 mt-32 mr-10">
       <form>
+        <p className="mb-3 font-semibold font-sans text-yellow-500">
+          Include your heading here to suggest additional feeds to help resolve
+          issue
+        </p>
         <div className="px-4 py-2 bg-white rounded dark:bg-gray-800">
-          <label htmlFor="comment" className="sr-only">
-            Your comment
-          </label>
           <input
             id="comment"
             rows="4"
@@ -110,31 +112,14 @@ function PostQuery() {
             required
           ></input>
         </div>
-        <div className="w-full mt-10 mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+        <p className="mb-3 mt-10 font-semibold font-sans text-yellow-500">
+          Give a brief explanation of your question so that other users may
+          comprehend it.
+        </p>
+        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
           <div className="flex items-center justify-between px-3 py-2 border-b dark:border-gray-600">
             <div className="flex flex-wrap items-center divide-gray-200 sm:divide-x sm:rtl:divide-x-reverse dark:divide-gray-600">
-              <div className="flex items-center space-x-1 rtl:space-x-reverse sm:pe-4">
-                <button
-                  type="button"
-                  className="p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    aria-hidden="true"
-                    fill="none"
-                    viewBox="0 0 12 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M1 6v8a5 5 0 1 0 10 0V4.5a3.5 3.5 0 1 0-7 0V13a2 2 0 0 0 4 0V6"
-                    />
-                  </svg>
-                  <span className="sr-only">Attach file</span>
-                </button>
-              </div>
+              <div className="flex items-center space-x-1 rtl:space-x-reverse sm:pe-4"></div>
               <div className="flex flex-wrap items-center space-x-1 rtl:space-x-reverse sm:ps-4"></div>
             </div>
             <button
@@ -169,9 +154,6 @@ function PostQuery() {
             </div>
           </div>
           <div className="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
-            <label htmlFor="editor" className="sr-only">
-              Publish post
-            </label>
             <textarea
               id="editor"
               rows="8"
@@ -183,13 +165,22 @@ function PostQuery() {
             ></textarea>
           </div>
         </div>
-        <button
-          type="submit"
-          className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
-          onClick={handleSubmit}
-        >
-          Post Query
-        </button>
+        <div className="flex items-center space-x-6 mt-7">
+          <label className="block">
+            <input
+              type="file"
+              onChange={(e) => setFiles(e.target.files[0])}
+              className="mt-3 block w-full text-sm text-slate-500 file:mr-4 mr-44 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+            />
+          </label>
+          <button
+            type="submit"
+            className="inline-flex px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+            onClick={handleSubmit}
+          >
+            Post Query
+          </button>
+        </div>
       </form>
     </div>
   );

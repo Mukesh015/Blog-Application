@@ -14,6 +14,9 @@ const signToken = (username, email, avatar) => {
       avatar: avatar,
     },
     secretKey,
+    {
+      expiresIn: Date.now() + expire * 24 * 60 * 60 * 1000,
+    }
   );
 };
 
