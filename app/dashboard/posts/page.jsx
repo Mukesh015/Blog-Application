@@ -58,16 +58,6 @@ const Post = () => {
     router.push(`/blogs/${id}`);
   };
 
-  const handleDeleteButtonClick = (post) => {
-    console.log('Bhuta deleting')
-    setSelectedPost(post); // Set the selected post for deletion
-  };
-
-  const handleConfirmDelete = () => {
-    // Implement deletion logic here
-    console.log("Deleting post:", selectedPost);
-    setSelectedPost(null); // Clear the selected post after deletion
-  };
 
   const PostItem = ({ post }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -78,8 +68,27 @@ const Post = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleDeleteButtonClick = () => {
-    setShowDeleteModal(true);
+  const handleDeleteButtonClick = async(query) => {
+    setSelectedPost(query);
+    try {
+      const response = await fetch("http://localhost:8080/deletequery", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query }),
+      });
+      if(!response.ok){
+        throw new Error("Failed to delete query");
+      }
+      else{
+        console.log("your posts is been deleted")
+        window.location.reload()
+      }
+    }
+    catch(error){
+      console.log("your posts is been deleted",error)
+    }
   };
 
   useEffect(() => {
@@ -139,7 +148,7 @@ const Post = () => {
                   <a
                     href="#"
                     className="block px-4 py-2 hover:bg-red-500 dark:hover:text-white"
-                    onClick={handleDeleteButtonClick} // Call the function to show the delete modal
+                    onClick={() => handleDeleteButtonClick(post.query)} // Call the function to show the delete modal
                   >
                     Delete
                   </a>

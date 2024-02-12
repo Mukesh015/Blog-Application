@@ -576,6 +576,17 @@ async function countTotalComments(req, res) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
+async function deleteQuery(req, res) {
+  const {query}=req.body
+   try {
+     await VlogModel.deleteOne({query:query});
+     res.status(201).json("Query successfully deleted ");
+   } catch (error) {
+     console.log(error);
+     res.status(503).json("Failed to delete document");
+   }
+ }
+
 
 module.exports = {
   newVlogCreate,
@@ -601,4 +612,5 @@ module.exports = {
   countTotalQueries,
   countTotalPosts,
   countTotalComments,
+  deleteQuery
 };

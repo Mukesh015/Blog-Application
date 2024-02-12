@@ -1,11 +1,19 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { Dialog, Transition } from "@headlessui/react";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 const Solve = () => {
+  const [open, setOpen] = useState(false);
+  const cancelButtonRef = useRef(null);
   const [query, setQuery] = useState([]);
   const router = useRouter();
+
+  const handlePopup = () => {
+    setOpen(true);
+  };
 
   useEffect(() => {
     async function fetchquery() {
@@ -36,82 +44,328 @@ const Solve = () => {
 
   return (
     <>
-      <div className="mt-20 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-        <a href="#">
-          <img
-            className="rounded-t-lg"
-            src="https://cdn.pixabay.com/photo/2024/01/31/19/56/tulips-8544741_1280.jpg"
-            alt="<image>"
-          />
-        </a>
-        <div className="p-5">
+      <div className="flex flex-wrap mt-20 gap-4">
+
+
+        <div className="mt-10 ml-20 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
           <a href="#">
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Noteworthy technology acquisitions 2021
-            </h5>
+            <img
+              className="rounded-t-lg"
+              src="https://cdn.pixabay.com/photo/2024/01/31/19/56/tulips-8544741_1280.jpg"
+              alt="<image>"
+            />
           </a>
-          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            Here are the biggest enterprise technology acquisitions of 2021 so
-            far, in reverse chronological order. read more...
-          </p>
-          <a
-            href="#"
-            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Read more
-            <svg
-              className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
+          <div className="p-5">
+            <div>
+              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white cursor-default">
+                Noteworthy technology acquisitions 2021
+              </h5>
+              <p class="mb-3 flex-row font-normal cursor-text text-gray-700 dark:text-gray-400">
+                Here are the biggest enterprise technology acquisitions of 2021
+                so far, in reverse chronological order... 
+                <button onClick={handlePopup} class="text-blue-500">
+                  read more
+                </button>
+              </p>
+            </div>
+            <a
+              href="#"
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-              />
-            </svg>
-          </a>
+              solve
+              <svg
+                className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
+
+        {/* Opening popup */}
+        <Transition.Root show={open} as={Fragment}>
+          <Dialog
+            as="div"
+            className="relative z-10"
+            initialFocus={cancelButtonRef}
+            onClose={setOpen}
+          >
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
+
+            <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <Dialog.Panel className="relative transform overflow-hidden rounded-2xl border border-gray-500 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl bg-black">
+                    <div className="px-4 pb-4 pt-5 sm:p-6 sm:pb-4  bg-black text-gray-500 max-h-96  overflow-y-auto">
+                      <p className="text-gray-500">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Provident sapiente eveniet, omnis suscipit vero
+                        voluptate! Iusto aliquam natus cumque, nesciunt autem
+                        quos nobis perferendis dicta! Consectetur sed
+                        consequatur ex nobis,
+                      </p>
+                    </div>
+
+                    <div className="bg-black px-4 py-3 justify-center sm:flex sm:flex-row-reverse sm:px-6">
+                      <button
+                        type="button"
+                        className="mt-1 bg-white inline-flex w-full justify-center rounded-md  px-3 py-2 text-sm font-semibold text-black shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-500 hover:text-white sm:mt-0 sm:w-auto"
+                        onClick={() => setOpen(false)}
+                        ref={cancelButtonRef}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </div>
+          </Dialog>
+        </Transition.Root>
+
+
+
+
+        <div className="mt-10 ml-20 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <a href="#">
+            <img
+              className="rounded-t-lg"
+              src="https://cdn.pixabay.com/photo/2024/01/31/19/56/tulips-8544741_1280.jpg"
+              alt="<image>"
+            />
+          </a>
+          <div className="p-5">
+            <div>
+              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white cursor-default">
+                Noteworthy technology acquisitions 2021
+              </h5>
+              <p class="mb-3 flex-row font-normal cursor-text text-gray-700 dark:text-gray-400">
+                Here are the biggest enterprise technology acquisitions of 2021
+                so far, in reverse chronological order ...
+                <button onClick={handlePopup} class="text-blue-500">
+                  read more
+                </button>
+              </p>
+            </div>
+            <a
+              href="#"
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              solve
+              <svg
+                className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        {/* Opening popup */}
+        <Transition.Root show={open} as={Fragment}>
+          <Dialog
+            as="div"
+            className="relative z-10"
+            initialFocus={cancelButtonRef}
+            onClose={setOpen}
+          >
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
+
+            <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <Dialog.Panel className="relative transform overflow-hidden rounded-2xl border border-gray-500 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl bg-black">
+                    <div className="px-4 pb-4 pt-5 sm:p-6 sm:pb-4  bg-black text-gray-500 max-h-96  overflow-y-auto">
+                      <p className="text-gray-500">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Provident sapiente eveniet, omnis suscipit vero
+                        voluptate! Iusto aliquam natus cumque, nesciunt autem
+                        quos nobis perferendis dicta! Consectetur sed
+                        consequatur ex nobis,
+                      </p>
+                    </div>
+
+                    <div className="bg-black px-4 py-3 justify-center sm:flex sm:flex-row-reverse sm:px-6">
+                      <button
+                        type="button"
+                        className="mt-1 bg-white inline-flex w-full justify-center rounded-md  px-3 py-2 text-sm font-semibold text-black shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-500 hover:text-white sm:mt-0 sm:w-auto"
+                        onClick={() => setOpen(false)}
+                        ref={cancelButtonRef}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </div>
+          </Dialog>
+        </Transition.Root>
+
+
+
+
+        <div className="mt-10 ml-20 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <a href="#">
+            <img
+              className="rounded-t-lg"
+              src="https://cdn.pixabay.com/photo/2024/01/31/19/56/tulips-8544741_1280.jpg"
+              alt="<image>"
+            />
+          </a>
+          <div className="p-5">
+            <div>
+              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white cursor-default">
+                Noteworthy technology acquisitions 2021
+              </h5>
+              <p class="mb-3 flex-row font-normal cursor-text text-gray-700 dark:text-gray-400">
+                Here are the biggest enterprise technology acquisitions of 2021
+                so far, in reverse chronological order ...
+                <button onClick={handlePopup} class="text-blue-500">
+                  read more
+                </button>
+              </p>
+            </div>
+            <a
+              href="#"
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              solve
+              <svg
+                className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        {/* Opening popup */}
+        <Transition.Root show={open} as={Fragment}>
+          <Dialog
+            as="div"
+            className="relative z-10"
+            initialFocus={cancelButtonRef}
+            onClose={setOpen}
+          >
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
+
+            <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <Dialog.Panel className="relative transform overflow-hidden rounded-2xl border border-gray-500 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl bg-black">
+                    <div className="px-4 pb-4 pt-5 sm:p-6 sm:pb-4  bg-black text-gray-500 max-h-96  overflow-y-auto">
+                      <p className="text-gray-500">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Provident sapiente eveniet, omnis suscipit vero
+                        voluptate! Iusto aliquam natus cumque, nesciunt autem
+                        quos nobis perferendis dicta! Consectetur sed
+                        consequatur ex nobis,
+                      </p>
+                    </div>
+
+                    <div className="bg-black px-4 py-3 justify-center sm:flex sm:flex-row-reverse sm:px-6">
+                      <button
+                        type="button"
+                        className="mt-1 bg-white inline-flex w-full justify-center rounded-md  px-3 py-2 text-sm font-semibold text-black shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-500 hover:text-white sm:mt-0 sm:w-auto"
+                        onClick={() => setOpen(false)}
+                        ref={cancelButtonRef}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </div>
+          </Dialog>
+        </Transition.Root>
       </div>
     </>
   );
 };
 export default Solve;
-
-// <div className="flex flex-wrap justify-center mt-20">
-//   {query.map((queryItem, index) => (
-//     <div
-//       key={index}
-//       className="max-w-sm m-5 p-10  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-//     >
-//       <svg
-//         className="w-7 h-7 text-gray-500 dark:text-gray-400 mb-3 mx-auto"
-//         aria-hidden="true"
-//         xmlns="http://www.w3.org/2000/svg"
-//         fill="currentColor"
-//         viewBox="0 0 20 20"
-//       >
-//         <path d="M18 5h-.7c.229-.467.349-.98.351-1.5a3.5 3.5 0 0 0-3.5-3.5c-1.717 0-3.215 1.2-4.331 2.481C8.4.842 6.949 0 5.5 0A3.5 3.5 0 0 0 2 3.5c.003.52.123 1.033.351 1.5H2a2 2 0 0 0-2 2v3a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V7a2 2 0 0 0-2-2ZM8.058 5H5.5a1.5 1.5 0 0 1 0-3c.9 0 2 .754 3.092 2.122-.219.337-.392.635-.534.878Zm6.1 0h-3.742c.933-1.368 2.371-3 3.739-3a1.5 1.5 0 0 1 0 3h.003ZM11 13H9v7h2v-7Zm-4 0H2v5a2 2 0 0 0 2 2h3v-7Zm6 0v7h3a2 2 0 0 0 2-2v-5h-5Z" />
-//       </svg>
-//       <a href="#">
-//         <h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">
-//           {queryItem.query}
-//         </h5>
-//       </a>
-//       <p className="mb-3 font-normal text-gray-500 dark:text-gray-400 text-center">
-//         No given description of the query. You can solve the problem or
-//         throw the answer as you capable of solving power.
-//       </p>
-//       <a
-//         onClick={() => handleSolve(queryItem.query)}
-//         className="cursor-pointer inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-//       >
-//         Solve
-//       </a>
-//     </div>
-//   ))}
-// </div>
