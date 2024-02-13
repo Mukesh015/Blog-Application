@@ -4,26 +4,30 @@ import React, { useEffect, useState, Fragment, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Dialog, Transition } from "@headlessui/react";
 
-
 const Solve = () => {
   const [open, setOpen] = useState(false);
   const cancelButtonRef = useRef(null);
   const [query, setQuery] = useState([]);
+  const [data, setData] = useState("");
   const router = useRouter();
 
-  const handlePopup = () => {
+  const handlePopup = (description) => {
     setOpen(true);
+    setData(description);
   };
 
   useEffect(() => {
     async function fetchquery() {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getallquery`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_DOMAIN}/getallquery`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to query comments");
@@ -70,7 +74,12 @@ const Solve = () => {
                           .slice(0, 2)
                           .join(".") + "..."
                       : "This query has no description provided, you can figure it out on your own... "}
-                    <button onClick={handlePopup} class="text-blue-500">
+                    <button
+                      onClick={() => {
+                        handlePopup(entry.queryDescription);
+                      }}
+                      class="text-blue-500"
+                    >
                       read more
                     </button>
                   </p>
@@ -132,23 +141,7 @@ const Solve = () => {
                 >
                   <Dialog.Panel className="relative transform overflow-hidden rounded-2xl border border-gray-500 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl bg-black">
                     <div className="px-4 pb-4 pt-5 sm:p-6 sm:pb-4  bg-black text-gray-500 max-h-96  overflow-y-auto">
-                      <p>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing
-                        elit. Reprehenderit officiis eveniet non dolorem sed
-                        repellat blanditiis, architecto dolores voluptate
-                        molestiae nemo enim reiciendis facere animi cupiditate
-                        esse id doloribus maiores inventore aspernatur possimus
-                        aut culpa. Officia quasi provident magni nesciunt
-                        accusantium. Hic distinctio mollitia commodi fugit, quis
-                        repellendus? Hic dolor itaque ipsa reprehenderit labore
-                        deleniti esse corporis animi similique voluptatem
-                        obcaecati cum, fugiat commodi natus molestiae vero rerum
-                        aliquid consequuntur debitis quibusdam ipsum nihil qui a
-                        quisquam. Praesentium, ipsum placeat consectetur maiores
-                        voluptates est, voluptatibus quasi magni distinctio nam
-                        ea? Iste tenetur atque error, dolore repellendus quod
-                        nesciunt exercitationem animi.
-                      </p>
+                      <p>{data}</p>
                     </div>
 
                     <div className="bg-black px-4 py-3 justify-center sm:flex sm:flex-row-reverse sm:px-6">
