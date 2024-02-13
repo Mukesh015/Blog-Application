@@ -11,7 +11,7 @@ const Inbox = () => {
 
   const fetchEmailInboxes = useCallback( async () => {
     try {
-      const fetchedEmail = await fetch("http://localhost:8080/getuser", {
+      const fetchedEmail = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getuser`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,7 +29,7 @@ const Inbox = () => {
         throw new Error("Failed to fetch user data or username is undefined");
       }
       try {
-        const response = await fetch("http://localhost:8080/getInboxes", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getInboxes`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

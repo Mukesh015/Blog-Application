@@ -18,7 +18,7 @@ export default function Blogs({ params }) {
   useEffect(() => {
     const fetchDescription = async () => {
       try {
-        const response = await fetch("http://localhost:8080/getblog", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getblog`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export default function Blogs({ params }) {
   useEffect(() => {
     const fetchEmail = async () => {
       try {
-        const fetchedEmail = await fetch("http://localhost:8080/getuser", {
+        const fetchedEmail = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getuser`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -76,7 +76,7 @@ export default function Blogs({ params }) {
 
   const handleAddComment = async () => {
     try {
-      const response = await fetch("http://localhost:8080/addcomment", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/addcomment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -14,7 +14,7 @@ const ContactSection = () => {
 
   const notify =async () => {
     try {
-      const response = await fetch('http://localhost:8080/submitissues', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/submitissues`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

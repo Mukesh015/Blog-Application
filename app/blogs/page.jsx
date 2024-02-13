@@ -11,7 +11,7 @@ export default function Blogs() {
   useEffect(() => {
     const fetchQueryDescription = async () => {
       try {
-        const response = await fetch("http://localhost:8080/getallblog", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getallblog`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

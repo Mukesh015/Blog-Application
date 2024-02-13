@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
     async function getUSerName() {
         const token = await getCookieValueByName("cookie-1");
         try {
-            const fetchedEmail = await fetch('http://localhost:8080/getuser', {
+            const fetchedEmail = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getuser`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

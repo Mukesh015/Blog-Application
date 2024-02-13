@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import cookie from "js-cookie";
 import { toast } from "react-toastify";
+import 'dotenv'
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -23,7 +24,7 @@ export default function Login() {
       theme: "dark",
     });
     try {
-      const response = await fetch("http://localhost:8080/verifyJWT", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/verifyjwt`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +66,7 @@ export default function Login() {
   const handleLogin = useCallback(async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/login", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -20,7 +20,7 @@ export default function Register() {
     formData.append('password', password);
 
     try {
-      const response = await fetch("http://localhost:8080/register", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/register`, {
         method: "POST",
 
         body: formData,

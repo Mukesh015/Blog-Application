@@ -24,7 +24,7 @@ const Dashboard = () => {
   const token = await getCookieValueByName("cookie-1");
     
   try {
-    const response = await fetch("http://localhost:8080/verifyJWT", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/verifyjwt`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -39,7 +39,7 @@ const Dashboard = () => {
       router.push("/login");
     }
   
-    const response1 = await fetch("http://localhost:8080/getuser", {
+    const response1 = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,7 +55,7 @@ const Dashboard = () => {
       setSenderEmail(email);
       setAuthorEmail(email)
   
-      const numberOfQuery = await fetch("http://localhost:8080/counttotalquery", {
+      const numberOfQuery = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/counttotalquery`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +70,7 @@ const Dashboard = () => {
         const query = await numquery;
         setTotalNoQuery(query);
       }
-      const numberOfPosts = await fetch("http://localhost:8080/counttotalposts", {
+      const numberOfPosts = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/counttotalposts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -86,7 +86,7 @@ const Dashboard = () => {
         setTotalNoPosts(posts);
       }
 
-      const numberOfComments = await fetch("http://localhost:8080/counttotalcomments", {
+      const numberOfComments = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/counttotalcomments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

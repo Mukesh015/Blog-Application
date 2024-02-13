@@ -17,7 +17,7 @@ const Solve = ({ params }) => {
   useEffect(() => {
     const fetchEmail = async () => {
       try {
-        const fetchedEmail = await fetch("http://localhost:8080/getuser", {
+        const fetchedEmail = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getuser`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -45,7 +45,7 @@ const Solve = ({ params }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/addcomment", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/addcomment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

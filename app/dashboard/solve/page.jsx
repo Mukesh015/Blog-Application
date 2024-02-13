@@ -12,7 +12,7 @@ const Solve = () => {
 
   const fetchEmail = useCallback(async () => {
     try {
-      const fetchedEmail = await fetch("http://localhost:8080/getuser", {
+      const fetchedEmail = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getuser`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24,7 +24,7 @@ const Solve = () => {
       if (userData && userData.username) {
         const email = await userData.username.email;
         setSenderEmail(email);
-        const response = await fetch("http://localhost:8080/getsolvequery", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getsolvequery`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -9,7 +9,7 @@ export default function Popular() {
   useEffect(() => {
     const fetchPopularBlog = async () => {
       try {
-        const response = await fetch("http://localhost:8080/getpopularblog", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getpopularblog`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

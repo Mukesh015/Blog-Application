@@ -3,7 +3,7 @@
 import React, { useEffect, useState, Fragment, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Dialog, Transition } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+
 
 const Solve = () => {
   const [open, setOpen] = useState(false);
@@ -18,7 +18,7 @@ const Solve = () => {
   useEffect(() => {
     async function fetchquery() {
       try {
-        const response = await fetch("http://localhost:8080/getallquery", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getallquery`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

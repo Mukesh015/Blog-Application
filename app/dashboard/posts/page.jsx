@@ -16,7 +16,7 @@ const Post = () => {
   useEffect(() => {
     const fetchEmailPosts = async () => {
       try {
-        const fetchedEmail = await fetch("http://localhost:8080/getuser", {
+        const fetchedEmail = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getuser`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -33,7 +33,7 @@ const Post = () => {
         }
 
         try {
-          const response = await fetch("http://localhost:8080/getposts", {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getposts`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -67,7 +67,7 @@ const Post = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      const response = await fetch("http://localhost:8080/deletequery", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/deletequery`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

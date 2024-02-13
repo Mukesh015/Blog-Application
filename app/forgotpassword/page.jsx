@@ -15,7 +15,7 @@ function ForgotPassword() {
   const handleEmailSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/generateotp", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/generateotp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +64,7 @@ function ForgotPassword() {
   const handleOtpSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/otpvalidation", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/otpvalidation`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +102,7 @@ function ForgotPassword() {
   const resetPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/resetpassword", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/resetpassword`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

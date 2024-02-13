@@ -12,7 +12,7 @@ function FeedbackSection() {
 
   const toastAnimation = async() => {
     try {
-      const response = await fetch('http://localhost:8080/submitfeedback', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/submitfeedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

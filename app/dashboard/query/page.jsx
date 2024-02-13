@@ -18,7 +18,7 @@ function PostQuery() {
   const validation = useCallback(async () => {
     const token = await getCookieValueByName("cookie-1");
     try {
-      const response = await fetch("http://localhost:8080/verifyJWT", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/verifyjwt`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,7 +34,7 @@ function PostQuery() {
         router.push("/login");
       }
 
-      const fetchedEmail = await fetch("http://localhost:8080/getuser", {
+      const fetchedEmail = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/getuser`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ function PostQuery() {
     formdata.append("queryPic", files);
 
     try {
-      const response = await fetch("http://localhost:8080/postnewquery", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/postnewquery`, {
         method: "POST",
 
         body: formdata,
