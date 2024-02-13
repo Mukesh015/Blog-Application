@@ -100,9 +100,6 @@ const About = () => {
                 src="https://i.ibb.co/ThZBWxH/Rectangle-121.png"
                 alt="Elijah featured img"
               />
-              <p className="font-medium text-xl leading-5 text-gray-800 mt-4">
-                Elijah
-              </p>
             </div>
           </div>
         </div>
