@@ -11,7 +11,7 @@ export default function Login() {
   const router = useRouter();
   const token = cookie.get("cookie-1");
 
-  const autoLogin = async () => {
+  const autoLogin = useCallback( async () => {
     toast.info("Trying to autologin ...", {
       position: "top-center",
       autoClose: 2000,
@@ -60,7 +60,7 @@ export default function Login() {
     } catch (error) {
       console.error("Server error autologin failed", error);
     }
-  };
+  },[router,token]);
 
   const handleLogin = useCallback(async (e) => {
     e.preventDefault();
