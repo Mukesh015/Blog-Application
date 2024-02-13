@@ -4,24 +4,25 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-
 function ForgotPassword() {
   const [emailEntered, setEmailEntered] = useState("");
   const [otpVerified, setOtpVerified] = useState("");
   const [passwordEntered, setPasswordEntered] = useState("");
   const router = useRouter();
 
-
   const handleEmailSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/generateotp`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: emailEntered }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/generateotp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: emailEntered }),
+        }
+      );
       if (!response.ok) {
         toast.error("OTP Generation Failed", {
           position: "top-right",
@@ -64,13 +65,16 @@ function ForgotPassword() {
   const handleOtpSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/otpvalidation`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: emailEntered, otp:otpVerified }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/otpvalidation`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: emailEntered, otp: otpVerified }),
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to validate otp");
       } else if (response.ok) {
@@ -102,16 +106,19 @@ function ForgotPassword() {
   const resetPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/resetpassword`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: emailEntered,
-          password: passwordEntered,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/resetpassword`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: emailEntered,
+            password: passwordEntered,
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to reset password");
       } else {
