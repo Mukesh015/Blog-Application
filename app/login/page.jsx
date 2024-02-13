@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import cookie from "js-cookie";
 import { toast } from "react-toastify";
@@ -62,7 +62,7 @@ export default function Login() {
     }
   };
 
-  const handleLogin = async (e) => {
+  const handleLogin = useCallback(async (e) => {
     e.preventDefault();
     try {
       const response = await fetch("http://localhost:8080/login", {
@@ -105,11 +105,11 @@ export default function Login() {
     } catch (error) {
       console.error("Server", error);
     }
-  };
+  },[router,email,password]);
 
   useEffect(() => {
     autoLogin();
-  }, []);
+  }, [autoLogin]);
 
   return (
     <div className="font-[sans-serif] bg-white text-[#333]">
@@ -120,7 +120,7 @@ export default function Login() {
               <div className="mb-12">
                 <h3 className="text-3xl font-extrabold">Sign in</h3>
                 <p className="text-sm mt-4 ">
-                  Don't have an account{" "}
+                  Dont have an account{" "}
                   <a
                     href="/register"
                     className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"

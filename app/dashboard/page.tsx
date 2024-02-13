@@ -188,7 +188,7 @@ const Dashboard = () => {
             <div className="flex flex-col items-center justify-center rounded bg-gray-50 h-52 dark:bg-gray-800 p-6">
               <h3 className="font-bold text-white text-2xl mt-3">Have Confusion?</h3>
               <p className="text-center text-gray-400 dark:text-gray-500 mt-3">
-                Have any queries? Let us know by posting. You will be notified in the comments box when someone resolves your query. The whole process may take some time, so let's get started!
+                Have any queries? Let us know by posting. You will be notified in the comments box when someone resolves your query. The whole process may take some time, so lets get started!
               </p>
               <a
                 href="/dashboard/query"

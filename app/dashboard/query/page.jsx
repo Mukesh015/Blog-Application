@@ -15,7 +15,7 @@ function PostQuery() {
   const [files, setFiles] = useState(null);
   const router = useRouter();
 
-  async function validation() {
+  const validation = useCallback(async () => {
     const token = await getCookieValueByName("cookie-1");
     try {
       const response = await fetch("http://localhost:8080/verifyJWT", {
@@ -52,23 +52,23 @@ function PostQuery() {
     } catch (error) {
       console.error("Server error autologin failed", error);
     }
-  }
+  }, [router]);
   useEffect(() => {
     validation();
-  }, []);
+  }, [validation]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formdata=new FormData()
-    formdata.append('senderEmail',senderEmail)
-    formdata.append('query',query)
-    formdata.append('queryDescription',queryDescription)
-    formdata.append('queryPic',files)
+    const formdata = new FormData();
+    formdata.append("senderEmail", senderEmail);
+    formdata.append("query", query);
+    formdata.append("queryDescription", queryDescription);
+    formdata.append("queryPic", files);
 
     try {
       const response = await fetch("http://localhost:8080/postnewquery", {
         method: "POST",
-      
+
         body: formdata,
       });
 
@@ -317,7 +317,9 @@ function PostQuery() {
               className="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
               placeholder="Describe your query here..."
               value={Query}
-              onChange={(e) => setQueryDescription(e.target.value.toLowerCase())}
+              onChange={(e) =>
+                setQueryDescription(e.target.value.toLowerCase())
+              }
               required
             ></textarea>
           </div>

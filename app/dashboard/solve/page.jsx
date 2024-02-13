@@ -10,7 +10,7 @@ const Solve = () => {
   const [senderEmail, setSenderEmail] = useState("");
   const router = useRouter();
 
-  const fetchEmail = async () => {
+  const fetchEmail = useCallback(async () => {
     try {
       const fetchedEmail = await fetch("http://localhost:8080/getuser", {
         method: "POST",
@@ -47,13 +47,13 @@ const Solve = () => {
         console.log("failed to fetch Solve query", error);
       }
 
-  };
+  },[token]);
 
 
   useEffect(() => {
     fetchEmail();
   
-  }, [token,senderEmail]);
+  }, [fetchEmail]);
 
 
   async function handleSolve(id) {

@@ -9,7 +9,7 @@ const Inbox = () => {
   const [inboxes, setInboxes] = useState("");
   const token = cookie.get("cookie-1");
 
-  const fetchEmailInboxes = async () => {
+  const fetchEmailInboxes = useCallback( async () => {
     try {
       const fetchedEmail = await fetch("http://localhost:8080/getuser", {
         method: "POST",
@@ -47,11 +47,11 @@ const Inbox = () => {
     } catch (error) {
       console.log("failed to fetch your inboxes");
     }
-  };
+  },[token,senderEmail]);
 
   useEffect(() => {
     fetchEmailInboxes();
-  }, [token, senderEmail]);
+  }, [fetchEmailInboxes]);
 
   return (
     <>

@@ -1,3 +1,5 @@
+
+
 async function getCookieValueByName(name){
     const cookies = document.cookie;
     const cookieArray = cookies.split(';').map(cookie => cookie.trim());
@@ -10,5 +12,6 @@ async function getCookieValueByName(name){
       return null;
     }
   };
+
 
 export default getCookieValueByName;

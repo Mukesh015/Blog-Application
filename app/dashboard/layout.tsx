@@ -2,7 +2,7 @@
 import 'react-toastify/dist/ReactToastify.css'
 import { useState, useEffect } from 'react';
 import getCookieValueByName from "../cookie.js";
-import Cookies from "js-cookie";
+import removeCookieValueByName from "../removecookie.js"
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
@@ -60,7 +60,7 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
             progress: undefined,
             theme: "dark",
         });
-        Cookies.remove("cookie-1");
+        await removeCookieValueByName("cookie-1");
         setTimeout(() => {
             router.push("/");
         }, 1500);
