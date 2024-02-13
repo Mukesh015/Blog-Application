@@ -39,16 +39,30 @@ async function newVlogCreate(req, res) {
 }
 
 async function postNewQuery(req, res) {
-  let { query, senderEmail } = req.body;
+  require("events").EventEmitter.defaultMaxListeners = 15;
+  let { query, senderEmail ,queryDescription} = req.body;
   query = query.replace(/[(),{}@#$%&*?/"']/g, "").toLowerCase();
   query = query.trim();
+  queryDescription = queryDescription.replace(/[(),{}@#$%&*?\n\r/"']/g, "").toLowerCase();
+  queryDescription = queryDescription.trim();
   try {
+    cloudinary.uploader.upload(req.file.path, async function (err, result) {
+      if (err) {
+        console.error("Cloudinary upload failed:", err);
+        return res
+          .status(500)
+          .json({ message: "Cloudinary upload failed", error: err });
+      }
+      const queryPic = result.url;
     const newPost = new VlogModel({
+      queryDescription:queryDescription,
       query: query,
       senderEmail: senderEmail,
+      queryPic:queryPic
     });
     await newPost.save();
     res.status(201).json("New query sucessfully post");
+  })
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Failed to post query! Server error" });
@@ -88,7 +102,7 @@ async function getAllBlog(req, res) {
     const popularBlog = await VlogModel.find({});
 
     if (popularBlog.length > 0) {
-      const keysToExtract = ["query", "description", "authorName"];
+      const keysToExtract = ["query", "description", "authorName","queryPic"];
 
       const extractedData = popularBlog.map((popularBlog) => {
         const extractedUser = {};
@@ -364,7 +378,7 @@ async function getAllquery(req, res) {
     const allQuery = await VlogModel.find({});
 
     if (allQuery.length > 0) {
-      const keysToExtract = ["query"];
+      const keysToExtract = ["query","queryPic","queryDescription"];
 
       const extractedData = allQuery.map((allQuery) => {
         const extractedUser = {};

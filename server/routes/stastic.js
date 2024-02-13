@@ -39,7 +39,7 @@ const upload = multer({ storage });
 
 StaticRouter.post("/createblog", newVlogCreate);
 StaticRouter.post("/getblog", getBlog);
-StaticRouter.post("/postnewquery", postNewQuery);
+StaticRouter.post("/postnewquery",upload.single('queryPic'), postNewQuery);
 StaticRouter.post("/getallblog", getAllBlog);
 StaticRouter.post("/addcomment", addComment);
 StaticRouter.post("/register",upload.single('avatar'), register);

@@ -10,6 +10,8 @@ import { Query } from "mongoose";
 function PostQuery() {
   const [senderEmail, setSenderEmail] = useState("");
   const [query, setQuery] = useState("");
+  const [queryDescription, setQueryDescription] = useState("");
+
   const [files, setFiles] = useState(null);
   const router = useRouter();
 
@@ -57,14 +59,17 @@ function PostQuery() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const formdata=new FormData()
+    formdata.append('senderEmail',senderEmail)
+    formdata.append('query',query)
+    formdata.append('queryDescription',queryDescription)
+    formdata.append('queryPic',files)
 
     try {
       const response = await fetch("http://localhost:8080/postnewquery", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ senderEmail, query }),
+      
+        body: formdata,
       });
 
       if (!response.ok) {
@@ -108,6 +113,7 @@ function PostQuery() {
             id="comment"
             className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Add your heading here..."
+            onChange={(e) => setQuery(e.target.value.toLowerCase())}
             required
           ></input>
         </div>
@@ -311,7 +317,7 @@ function PostQuery() {
               className="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
               placeholder="Describe your query here..."
               value={Query}
-              onChange={(e) => setQuery(e.target.value.toLowerCase())}
+              onChange={(e) => setQueryDescription(e.target.value.toLowerCase())}
               required
             ></textarea>
           </div>
