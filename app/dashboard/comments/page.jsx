@@ -10,7 +10,7 @@ const Comment = () => {
   const token = cookie.get("cookie-1");
   const router = useRouter();
 
-  async function validation() {
+  const validation = useCallback(async () => {
     try {
       const response = await fetch("http://localhost:8080/verifyJWT", {
         method: "POST",
@@ -30,55 +30,51 @@ const Comment = () => {
     } catch (error) {
       console.error("Server error autologin failed", error);
     }
-  }
+  }, [token, router]);
 
-  useEffect(() => {
-    const fetchEmail = async () => {
-      try {
-        const fetchedEmail = await fetch("http://localhost:8080/getuser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token }),
-        });
-        const userData = await fetchedEmail.json();
-        const email = userData.username.email;
-        setAuthorEmail(email);
-      } catch (error) {
-        console.log("failed to fetch Email", error);
-      }
-    };
-    validation();
-    fetchEmail();
+  const fetchEmail = useCallback(async () => {
+    try {
+      const fetchedEmail = await fetch("http://localhost:8080/getuser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+      const userData = await fetchedEmail.json();
+      const email = userData.username.email;
+      setAuthorEmail(email);
+    } catch (error) {
+      console.log("failed to fetch Email", error);
+    }
   }, [token]);
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch("http://localhost:8080/getcomments", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ authorEmail }),
-        });
+  const fetchComments = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:8080/getcomments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ authorEmail }),
+      });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch comments");
-        }
-
-        const data = await response.json();
-        setComments(data);
-      } catch (error) {
-        console.error("Failed to fetch comments", error);
+      if (!response.ok) {
+        throw new Error("Failed to fetch comments");
       }
-    };
-    if (authorEmail) {
-      fetchComments();
+
+      const data = await response.json();
+      setComments(data);
+    } catch (error) {
+      console.error("Failed to fetch comments", error);
     }
   }, [authorEmail]);
+  useEffect(() => {
+    validation();
+    fetchEmail();
+    fetchComments();
+  }, [validation, fetchEmail, fetchComments]);
 
   return (
     <div className="mr-16 ml-80 mt-20">

@@ -7,7 +7,7 @@ export default function NotFound() {
                 <div className="w-full lg:w-1/2 mx-8">
                     <div className="text-7xl text-green-500 font-dark font-extrabold mb-8">404</div>
                     <p className="text-2xl md:text-3xl font-light leading-normal mb-8">
-                        Sorry we couldn't find the page you're looking for
+                        Sorry we couldnt find the page youre looking for
                     </p>
                     <a
                         href="/"
