@@ -1,5 +1,4 @@
 "use client";
-import Error503 from "../../error503.jsx";
 import Error404 from "../../error404.jsx";
 import { useState, useEffect } from "react";
 import cookie from "js-cookie";
@@ -141,7 +140,7 @@ export default function Blogs({ params }) {
               rows="auto"
               style={{
                 height: "auto",
-                width: "100%", // Set width to 100%
+                width: "100%",
                 minHeight: "120px",
               }}
               className="block p-3.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

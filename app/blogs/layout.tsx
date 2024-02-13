@@ -1,13 +1,17 @@
 "use client"
 import NextTopLoader from 'nextjs-toploader';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
+import { toast } from "react-toastify";
 
 export default function BlogsLayout({
   children,
 }
 
-: Readonly<{ children: React.ReactNode; }>) {
+  : Readonly<{ children: React.ReactNode; }>) {
   const [searchQuery, setSearchQuery] = useState('');
+
   async function handleSearch() {
     var regex = new RegExp(searchQuery, 'gi');
     var matches = document.body.innerText.match(regex);
@@ -15,15 +19,25 @@ export default function BlogsLayout({
       var html = document.body.innerHTML;
       matches.forEach(match => {
         html = html.replace(new RegExp(match, 'g'), `<mark>${match}</mark>`);
-    });
-    document.body.innerHTML = html;
+      });
+      document.body.innerHTML = html;
+
     } else {
-      alert('No matches found for "' + searchQuery + '".');
+      toast.error("No blogs found", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   }
-
   return (
     <>
+      <ToastContainer />
       <header>
         <nav className="bg-white border-gray-200 dark:bg-gray-900 fixed top-0 w-full">
           <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -37,7 +51,7 @@ export default function BlogsLayout({
                 data-collapse-toggle="navbar-search"
                 aria-controls="navbar-search"
                 aria-expanded="false"
-               
+
                 className="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 me-1"
               >
                 <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
