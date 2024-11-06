@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'
+import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 
 export default function Home() {
@@ -17,7 +18,7 @@ export default function Home() {
 
   return (
     <>
-      <nav className="bg-white border-gray-200 dark:bg-gray-900 fixed top-0 w-full">
+      <nav className="bg-white border-gray-200 dark:bg-gray-900 fixed top-0 w-full z-50">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2022/05/Mastercard_2019_logo.svg-e1659036851269.png?auto=format&q=60&fit=max&w=930" className="h-8" alt="Flowbite Logo" />
@@ -123,25 +124,20 @@ export default function Home() {
         </div>
       </nav>
 
-      <main className="flex min-h-screen flex-col items-center justify-between p-24 overflow-hidden">
-        <div className="z-10 max-w-5xl w-full jflex items-center justify-center font-serif pt-10 ">
-          <h1 className="text-3xl text-center ">WELCOME TO BLOG COMMUNITY</h1>
+      <BackgroundBeamsWithCollision className=' h-[92vh]'>
+        <div className="absolute md:space-x-3 md:flex-row  bottom-96 flex-col flex justify-center text-center bg-clip-text bg-no-repeat text-transparent bg-gradient-to-r py-4 from-purple-500 via-violet-500 to-pink-500 [text-shadow:0_0_rgba(0,0,0,0.1)]">
+          <span className="md:text-7xl text-4xl font-bold">Welcome</span>
+          <span className='md:text-7xl text-3xl font-bold'>To Blog Community</span>
         </div>
-        <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-          <Image
-            className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert pt-10"
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-        </div>
+      </BackgroundBeamsWithCollision>
 
-        <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
+      <div className="fixed bottom-10 left-0 right-0 flex justify-center px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center lg:max-w-5xl w-full lg:mb-0 lg:text-left text-white ">
+
+          {/* Learn Section (Hidden on Mobile) */}
           <a
             href="/docs"
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            className="group rounded-lg border border-transparent px-5 py-4  hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 hidden sm:block hs-accordion transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-150"
           >
             <h2 className={`mb-3 text-2xl font-semibold`}>
               Learn{" "}
@@ -154,24 +150,26 @@ export default function Home() {
             </p>
           </a>
 
+          {/* Popular Section (Hidden on Mobile) */}
           <a
             href="/popular"
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            className="group rounded-lg border border-transparent px-5 py-4 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 hidden sm:block hs-accordion transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-150"
           >
             <h2 className={`mb-3 text-2xl font-semibold`}>
-              Populars{" "}
+              Popular{" "}
               <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
                 -&gt;
               </span>
             </h2>
             <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Lets see all popular blogs &nbsp;here!
+              Lets see all popular blogs here!
             </p>
           </a>
 
+          {/* Queries Section (Hidden on Mobile) */}
           <a
             href="/query"
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            className="group rounded-lg border border-transparent px-5 py-4 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 hidden sm:block hs-accordion transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-150"
           >
             <h2 className={`mb-3 text-2xl font-semibold`}>
               Queries{" "}
@@ -180,25 +178,27 @@ export default function Home() {
               </span>
             </h2>
             <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Explore the problems faces by users and proove them you are unique one.
+              Explore the problems faced by users and prove you are unique.
             </p>
           </a>
-          <a 
+
+          {/* Register / Login Section (Visible on all screen sizes) */}
+          <a
             href="/login"
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            className="group rounded-lg  border-transparent px-14 py-4 md:px-4 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 hs-accordion transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-150"
           >
             <h2 className={`mb-3 text-2xl font-semibold`}>
-              Register / Login{ }
+              Register / Login{" "}
               <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
                 -&gt;
               </span>
             </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
+            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
               If you are not a user, please login first for further processes.
             </p>
           </a>
         </div>
-      </main>
+      </div>
     </>
   );
 }

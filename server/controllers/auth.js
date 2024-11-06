@@ -39,8 +39,9 @@ async function newVlogCreate(req, res) {
 }
 
 async function postNewQuery(req, res) {
-  require("events").EventEmitter.defaultMaxListeners = 15;
+  // require("events").EventEmitter.defaultMaxListeners = 15;
   let { query, senderEmail ,queryDescription} = req.body;
+  console.log(query, senderEmail, queryDescription);
   query = query.replace(/[(),{}@#$%&*?/"']/g, "").toLowerCase();
   query = query.trim();
   queryDescription = queryDescription.replace(/[(),{}@#$%&*?\n\r/"']/g, "").toLowerCase();

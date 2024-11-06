@@ -5,15 +5,14 @@ import React from "react";
 import getCookieValueByName from "../../cookie.js";
 import { useEffect,useCallback } from "react";
 import { toast } from "react-toastify";
-import { Query } from "mongoose";
 
 function PostQuery() {
+  const router = useRouter();
   const [senderEmail, setSenderEmail] = useState("");
   const [query, setQuery] = useState("");
   const [queryDescription, setQueryDescription] = useState("");
 
   const [files, setFiles] = useState(null);
-  const router = useRouter();
 
   const validation = useCallback(async () => {
     const token = await getCookieValueByName("cookie-1");
@@ -60,15 +59,15 @@ function PostQuery() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formdata = new FormData();
-    formdata.append("senderEmail", senderEmail);
     formdata.append("query", query);
+    formdata.append("senderEmail", senderEmail);
     formdata.append("queryDescription", queryDescription);
     formdata.append("queryPic", files);
+    console.log(formdata);
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/postnewquery`, {
         method: "POST",
-
         body: formdata,
       });
 
@@ -111,6 +110,7 @@ function PostQuery() {
         <div className="px-4 py-2 bg-white rounded dark:bg-gray-800">
           <input
             id="comment"
+            value={query}
             className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Add your heading here..."
             onChange={(e) => setQuery(e.target.value.toLowerCase())}
@@ -316,7 +316,7 @@ function PostQuery() {
               rows="8"
               className="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
               placeholder="Describe your query here..."
-              value={Query}
+              value={queryDescription}
               onChange={(e) =>
                 setQueryDescription(e.target.value.toLowerCase())
               }

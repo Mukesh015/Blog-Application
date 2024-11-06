@@ -1,4 +1,4 @@
-// File: D:\Projects\Next-Appliation\blog-application\app\blogs\page.jsx
+// File: C:\Projects\Blog-Next-Appliation\blog-application\app\blogs\page.jsx
 import * as entry from '../../../../app/blogs/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
